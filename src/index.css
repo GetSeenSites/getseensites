@@ -1,0 +1,246 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 17 100% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 17 100% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 17 100% 60%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 17 100% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 63%;
+
+    --accent: 17 100% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 17 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-orange-gradient text-white font-semibold px-8 py-4 rounded-xl hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-white border-2 border-white font-semibold px-8 py-4 rounded-xl hover:bg-white hover:text-black transition-all duration-300;
+  }
+
+  .text-gradient {
+    @apply bg-orange-gradient bg-clip-text text-transparent;
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/10 border border-white/20;
+  }
+
+  .hero-text {
+    @apply text-6xl md:text-7xl lg:text-8xl font-bold leading-tight;
+  }
+
+  .section-padding {
+    @apply py-20 lg:py-32;
+  }
+
+  .container-width {
+    @apply max-w-7xl mx-auto px-6 lg:px-8;
+  }
+
+  /* Cosmic background */
+  .bg-hero-gradient {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #000000 100%);
+    position: relative;
+  }
+
+  .bg-orange-gradient {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+  }
+
+  /* Letter animation for hero title */
+  .hero-letter {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hero-letter:hover {
+    transform: translateY(-8px);
+    animation: letterJump 0.6s ease-out;
+  }
+
+  @keyframes letterJump {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(-8px); }
+  }
+
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Slide up animation */
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.8s ease-out forwards;
+  }
+
+  /* Cosmic stars background pattern */
+  .stars-bg {
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+      radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
+      radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent),
+      radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.2), transparent),
+      radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.3), transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+  }
+
+  /* Apple-style input styles */
+  .apple-input {
+    @apply w-full px-4 py-3 bg-white/95 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200;
+  }
+
+  .apple-input-dark {
+    @apply w-full px-4 py-3 bg-white/10 border border-orange-500/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent backdrop-blur-sm transition-all duration-200;
+  }
+
+  /* Apple-style card */
+  .apple-card {
+    @apply bg-white/95 backdrop-blur-xl rounded-2xl border border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  .apple-card-dark {
+    @apply bg-black/90 backdrop-blur-xl rounded-2xl border border-orange-500/20 shadow-2xl;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FF6B35;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E8481D;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background-color: #FF6B35;
+  color: white;
+}
+
+/* Sidebar progressive expansion animation */
+.sidebar-label {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-expanded .sidebar-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Staggered animation delays for sidebar labels */
+.sidebar-expanded .sidebar-label:nth-child(1) { transition-delay: 0.05s; }
+.sidebar-expanded .sidebar-label:nth-child(2) { transition-delay: 0.1s; }
+.sidebar-expanded .sidebar-label:nth-child(3) { transition-delay: 0.15s; }
+.sidebar-expanded .sidebar-label:nth-child(4) { transition-delay: 0.2s; }
+.sidebar-expanded .sidebar-label:nth-child(5) { transition-delay: 0.25s; }
+.sidebar-expanded .sidebar-label:nth-child(6) { transition-delay: 0.3s; }
