@@ -211,8 +211,8 @@ const HeroSection = () => {
                 transition={{ delay: 1.7, duration: 0.6 }}
                 className="absolute -bottom-4 -left-4 bg-white/10 backdrop-blur-xl rounded-2xl p-4 text-center border border-white/20"
               >
-                <div className="text-2xl font-bold text-white">$249</div>
-                <div className="text-white/70 text-xs font-medium">Starting Setup</div>
+                <div className="text-2xl font-bold text-white"></div>
+                <div className="text-white/70 text-xs font-medium"></div>
               </motion.div>
             </motion.div>
           </div>
