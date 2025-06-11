@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 const ServicesSection = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const handleGetStarted = () => {
     if (!user) {
@@ -27,52 +28,63 @@ const ServicesSection = () => {
 
   const plans = [
     {
+      id: 'basic',
+      name: 'Basic',
+      monthlyPrice: 25,
+      annualPrice: 270,
+      features: [
+        '1 page (About Us)',
+        'Basic SEO',
+        'Mobile-responsive',
+        '5 templates, limited customization',
+        'Domain connection',
+        'Email support (48hr)',
+        'SSL certificate',
+        '99.9% uptime'
+      ]
+    },
+    {
       id: 'starter',
       name: 'Starter',
-      setupFee: 149,
-      monthlyFee: 40,
+      monthlyPrice: 35,
+      annualPrice: 378,
       features: [
-        'Up to 3 pages',
-        'Mobile responsive design',
-        'Basic SEO setup',
-        'Contact form integration',
-        'Social media links',
+        'All Basic features +',
+        '5 pages (Home, Shop, About, Contact, Blog)',
+        'Basic e-commerce (10 products)',
+        'Stripe/PayPal, 2% fee',
+        'Enhanced SEO',
+        'Moderate design customization',
+        'Social media integration'
       ]
     },
     {
       id: 'business',
       name: 'Business',
-      setupFee: 249,
-      monthlyFee: 85,
+      monthlyPrice: 69,
+      annualPrice: 745,
       popular: true,
       features: [
-        'Starter Plan +',
-        'Up to 6 pages',
-        'Animations + Effects',
-        'Shipping/Booking',
-        'Advanced SEO optimization',
-        'Advanced contact forms',
-        'E-commerce ready',
-        '30-day priority support'
+        'All Starter features +',
+        '7 custom-branded pages',
+        'Responsive animations',
+        'Basic SEO setup',
+        'E-commerce: 25 products',
+        'Google Analytics integration'
       ]
     },
     {
       id: 'premium',
       name: 'Premium',
-      setupFee: 650,
-      monthlyFee: 170,
-      startingAt: true,
+      monthlyPrice: 159,
+      annualPrice: 1717,
       features: [
-        'Business Plan +',
-        'Up to 10 pages',
-        'Advanced custom features',
-        'Premium SEO package',
-        'Advanced integrations',
-        'Anaylitics',
-        'Custom design elements',
-        'Priority development',
-        '3 revisions',
-        'Custom functionality'
+        'All Business features +',
+        '14 custom-designed pages',
+        'Advanced SEO (schema, AI keyword injection)',
+        'Unlimited products',
+        'Priority support (4hr SLA)',
+        '3 team accounts'
       ]
     }
   ];
@@ -106,7 +118,7 @@ const ServicesSection = () => {
         />
       ))}
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -114,23 +126,41 @@ const ServicesSection = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
             Our <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Services</span>
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
+          <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto mb-8">
             Choose the perfect plan for your business needs and watch your online presence transform.
           </p>
+          
+          {/* Monthly/Annual Toggle */}
+          <div className="flex items-center justify-center mb-8">
+            <span className={`text-lg ${!isAnnual ? 'text-white' : 'text-white/60'}`}>Monthly</span>
+            <button
+              onClick={() => setIsAnnual(!isAnnual)}
+              className="mx-4 relative inline-flex h-6 w-11 items-center rounded-full bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-orange-500 transition-transform ${
+                  isAnnual ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+            <span className={`text-lg ${isAnnual ? 'text-white' : 'text-white/60'}`}>
+              Annual <span className="text-green-400 text-sm">(Save 10%)</span>
+            </span>
+          </div>
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={`relative bg-white/10 backdrop-blur-xl rounded-2xl p-8 border transition-all duration-300 group ${
+              className={`relative bg-white/10 backdrop-blur-xl rounded-2xl p-6 border transition-all duration-300 group ${
                 plan.popular 
                   ? 'border-orange-500/50 bg-gradient-to-br from-orange-500/20 to-orange-600/10' 
                   : 'border-white/20 hover:border-orange-500/50'
@@ -144,28 +174,27 @@ const ServicesSection = () => {
                 </div>
               )}
 
-              <div className="text-center mb-8">
-                <h3 className="text-3xl font-bold text-white mb-4">{plan.name}</h3>
+              <div className="text-center mb-6">
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">{plan.name}</h3>
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold text-orange-500">
-                    {plan.startingAt ? 'Starting at ' : ''}${plan.setupFee}
-                    <span className="text-lg text-white/70"> setup</span>
+                  <div className="text-2xl sm:text-3xl font-bold text-orange-500">
+                    ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
+                    <span className="text-base sm:text-lg text-white/70">
+                      {isAnnual ? '/year' : '/month'}
+                    </span>
                   </div>
-                  <div className="text-2xl font-semibold text-orange-400">
-                    + ${plan.monthlyFee}<span className="text-lg text-white/70">/month</span>
-                  </div>
-                  {plan.startingAt && (
-                    <div className="text-sm text-white/60">
-                      Custom features available
+                  {isAnnual && (
+                    <div className="text-sm text-green-400">
+                      Save ${(plan.monthlyPrice * 12) - plan.annualPrice}/year
                     </div>
                   )}
                 </div>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center text-white/80">
-                    <Check className="w-5 h-5 text-green-400 mr-3 flex-shrink-0" />
+                  <li key={featureIndex} className="flex items-start text-white/80 text-sm">
+                    <Check className="w-4 h-4 text-green-400 mr-2 flex-shrink-0 mt-0.5" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -173,14 +202,14 @@ const ServicesSection = () => {
 
               <button
                 onClick={handleAddToProject}
-                className={`w-full font-semibold py-4 px-6 rounded-xl transition-all group ${
+                className={`w-full font-semibold py-3 px-4 rounded-xl transition-all text-sm group ${
                   plan.popular
                     ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-lg hover:shadow-orange-500/25'
                     : 'btn-primary'
                 }`}
               >
                 Add to Project
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
           ))}
@@ -193,10 +222,10 @@ const ServicesSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-center"
         >
-          <h3 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6">
             Ready to <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Get Started?</span>
           </h3>
-          <p className="text-xl text-white/80 max-w-2xl mx-auto mb-8">
+          <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-8">
             Let's discuss your project and create something amazing together.
           </p>
           <button
