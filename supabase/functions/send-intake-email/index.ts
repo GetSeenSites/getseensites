@@ -21,37 +21,46 @@ interface IntakeEmailRequest {
 const formatFormData = (data: any) => {
   const sections = [
     {
-      title: "📋 Project Details",
+      title: "👤 Company Information",
       fields: [
-        { label: "Full Name", value: data.fullName },
         { label: "Email", value: data.email },
-        { label: "Business Name", value: data.businessName },
-        { label: "Business Description", value: data.businessDescription },
+        { label: "Company Name", value: data.companyName },
+        { label: "Current Website", value: data.websiteUrl || "None" },
+        { label: "Industry", value: data.industry },
       ]
     },
     {
-      title: "🎯 Project Requirements",
+      title: "🏢 Business Details",
+      fields: [
+        { label: "Business Description", value: data.businessDescription },
+        { label: "Target Audience", value: data.targetAudience },
+        { label: "Website Goals", value: data.goals || "Not specified" },
+      ]
+    },
+    {
+      title: "🎨 Design Preferences",
+      fields: [
+        { label: "Style Preferences", value: data.stylePreferences || "Not specified" },
+        { label: "Color Preferences", value: data.colorPreferences || "Not specified" },
+        { label: "Inspiration Websites", value: data.exampleWebsites || "None provided" },
+      ]
+    },
+    {
+      title: "📋 Project Requirements",
       fields: [
         { label: "Page Count", value: data.pageCount },
-        { label: "Project Type", value: Array.isArray(data.projectType) ? data.projectType.join(", ") : data.projectType },
-        { label: "Reference Website URL", value: data.referenceUrl || "Not provided" },
+        { label: "Selected Plan", value: data.selectedPlan?.charAt(0).toUpperCase() + data.selectedPlan?.slice(1) },
+        { label: "Billing", value: data.billing?.charAt(0).toUpperCase() + data.billing?.slice(1) },
+        { label: "Add-ons", value: formatAddOns(data.addOns) },
       ]
     },
     {
-      title: "💰 Selected Package & Add-ons",
+      title: "💰 Pricing Summary",
       fields: [
-        { label: "Selected Plan", value: data.selectedPackage || data.plan },
-        { label: "Add-ons", value: formatAddOns(data.addOns || data.selectedAddons) },
-      ]
-    },
-    {
-      title: "💵 Pricing Breakdown",
-      fields: [
-        { label: "Setup Fee", value: `$${data.setupFee || 0}` },
-        { label: "One-time Add-ons", value: `$${data.oneTimeTotal || data.oneTimeAddOns || 0}` },
-        { label: "First Month", value: `$${data.firstMonth || 0}` },
-        { label: "Monthly Recurring", value: `$${data.monthlyRecurring || 0}` },
-        { label: "Total Today", value: `$${data.grandTotal || data.today || 0}` },
+        { label: "One-time Add-ons", value: `$${data.pricing?.oneTimeAddOns || 0}` },
+        { label: "Plan Fee", value: `$${data.pricing?.firstPayment - (data.pricing?.oneTimeAddOns || 0) || 0}` },
+        { label: "Monthly Recurring", value: `$${data.pricing?.monthlyRecurring || 0}` },
+        { label: "Total Today", value: `$${data.pricing?.today || 0}` },
       ]
     }
   ];
@@ -70,10 +79,6 @@ const formatFormData = (data: any) => {
 
 const formatAddOns = (addOns: any) => {
   if (!addOns) return "None selected";
-  
-  if (Array.isArray(addOns)) {
-    return addOns.length > 0 ? addOns.join(", ") : "None selected";
-  }
   
   if (typeof addOns === "object") {
     const selected = Object.entries(addOns)
@@ -145,7 +150,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "GetSeenSites <onboarding@resend.dev>",
       to: ["contactgetseensites@gmail.com"],
-      subject: `🚀 New Project: ${formData.businessName || formData.fullName} - ${formData.selectedPackage || formData.plan} Plan`,
+      subject: `🚀 New Project: ${formData.companyName} - ${formData.selectedPlan?.charAt(0).toUpperCase() + formData.selectedPlan?.slice(1)} Plan`,
       html: emailHtml,
       attachments: attachments,
     });
