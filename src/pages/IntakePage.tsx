@@ -45,12 +45,12 @@ const plans = {
     monthlyFee: 25, 
     annualFee: 270, 
     features: [
-      'Basic website',
-      'Up to 5 pages',
+      '3 Templates(Ground-level Custimization)',
+      'Up to 3 pages',
       'Mobile responsive',
       'Basic SEO',
       'SSL certificate',
-      '99.9% uptime'
+      'Domain Support'
     ] 
   },
   starter: { 
@@ -58,12 +58,13 @@ const plans = {
     monthlyFee: 35, 
     annualFee: 378, 
     features: [
-      'Standard website',
-      'Up to 10 pages',
-      'SEO optimization',
-      'Contact forms',
-      'Social media integration',
-      'Email support'
+      'Basic Features +',
+      '10 Templates (Moderate customization)',
+      'Up to 5 pages',
+      'E-commerce(10 products)(3% Transaction Fee)',
+      'Stripe Integration (Payment Proceccing)',
+      'Booking/Signup Setup',
+      'Social media integration'
     ] 
   },
   business: { 
@@ -71,10 +72,11 @@ const plans = {
     monthlyFee: 69, 
     annualFee: 745, 
     features: [
-      'Advanced website',
-      'Up to 20 pages',
-      'E-commerce ready',
-      'Priority support',
+      'Starter Features +',
+      'Advanced SEO',
+      'Up to 9 pages',
+      'E-commerce(unlimited products, Abandoned Cart Recovery, 1% Transaction Fee)',
+      'Increased support',
       'Analytics dashboard',
       'Custom integrations'
     ] 
@@ -84,12 +86,14 @@ const plans = {
     monthlyFee: 159, 
     annualFee: 1717, 
     features: [
+      'Business Features +',
       'Custom website',
-      'Unlimited pages',
-      'Dedicated support',
-      'Marketing consultation',
-      'Advanced analytics',
-      'Custom development'
+      'Unlimited Pages',
+      'Priority Support(1-hour Support Repsonse Time (Within Working Hours))',
+      'Advanced SEO',
+      'Advanced Analytics',
+      'AI Product Recommendations',
+      '3 Team Accounts'
     ] 
   }
 };
