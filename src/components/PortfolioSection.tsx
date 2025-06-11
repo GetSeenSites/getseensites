@@ -19,35 +19,35 @@ const PortfolioSection = () => {
       title: "COFooty",
       description: "Soccer Personal Trainer",
       tags: ["Train", "Booking", "Sports"],
-      url: "https://bellavista-restaurant.com",
+      url: "",
       image: "Web_train.png"
     },
     {
       title: "SkylineBuild ",
       description: "Clean, corporate website showcasing construction services.",
       tags: ["Construction", "Roofing", "Business"],
-      url: "https://techflow-solutions.com",
+      url: "",
       image: "Web_construction.png"
     },
     {
       title: "Ramen Numerals",
       description: "Small Japanese ramen shop.",
       tags: ["Food", "Japan", "Restaurant"],
-      url: "https://artisan-jewelry.com",
+      url: "",
       image: "Web_rest.png"
     },
     {
       title: "On The Edge Photography",
       description: "Professional portfolio showcasing creative work.",
       tags: ["Portfolio", "Photography", "Creative"],
-      url: "https://davidpark-photo.com",
+      url: "",
       image: "Web_photo.png"
     },
     {
       title: "GREEN VALLEY LANDSCAPING",
       description: "Service-based website with project galleries.",
       tags: ["Services", "Landscaping", "Calculator"],
-      url: "https://greenvalley-landscape.com",
+      url: "",
       image: "Web_land.png"
     }
   ];
