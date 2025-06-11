@@ -33,15 +33,13 @@ const ServicesSection = () => {
       monthlyPrice: 25,
       annualPrice: 270,
       features: [
-        '1 page (About Us)',
-        'Basic SEO',
-        'Mobile-responsive',
-        '5 templates, limited customization',
-        'Domain connection',
-        'Email support (48hr)',
-        'SSL certificate',
-        '99.9% uptime'
-      ]
+      '3 Templates(Ground-level Customization)',
+      'Up to 3 pages',
+      'Mobile responsive',
+      'Basic SEO',
+      'SSL certificate',
+      'Domain Support'
+    ] 
     },
     {
       id: 'starter',
@@ -49,14 +47,14 @@ const ServicesSection = () => {
       monthlyPrice: 35,
       annualPrice: 378,
       features: [
-        'All Basic features +',
-        '5 pages (Home, Shop, About, Contact, Blog)',
-        'Basic e-commerce (10 products)',
-        'Stripe/PayPal, 2% fee',
-        'Enhanced SEO',
-        'Moderate design customization',
-        'Social media integration'
-      ]
+      'Basic Features +',
+      '10 Templates (Moderate customization)',
+      'Up to 5 pages',
+      'E-commerce(10 products)(3% Transaction Fee)',
+      'Stripe Integration (Payment Processing)',
+      'Booking/Signup Setup',
+      'Social media integration'
+    ] 
     },
     {
       id: 'business',
@@ -65,13 +63,14 @@ const ServicesSection = () => {
       annualPrice: 745,
       popular: true,
       features: [
-        'All Starter features +',
-        '7 custom-branded pages',
-        'Responsive animations',
-        'Basic SEO setup',
-        'E-commerce: 25 products',
-        'Google Analytics integration'
-      ]
+      'Starter Features +',
+      'Advanced SEO',
+      'Up to 9 pages',
+      'E-commerce(unlimited products, Abandoned Cart Recovery, 1% Transaction Fee)',
+      'Increased support',
+      'Analytics dashboard',
+      'Custom integrations'
+    ] 
     },
     {
       id: 'premium',
@@ -79,13 +78,14 @@ const ServicesSection = () => {
       monthlyPrice: 159,
       annualPrice: 1717,
       features: [
-        'All Business features +',
-        '14 custom-designed pages',
-        'Advanced SEO (schema, AI keyword injection)',
-        'Unlimited products',
-        'Priority support (4hr SLA)',
-        '3 team accounts'
-      ]
+      'Business Features +',
+      'Custom website',
+      'Unlimited Pages',
+      'Priority Support(1-hour Support Repsonse Time (Within Working Hours))',
+      'Advanced SEO',
+      'Advanced Analytics',
+      'AI Product Recommendations',
+      '3 Team Accounts'
     }
   ];
 
