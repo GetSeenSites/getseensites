@@ -86,6 +86,7 @@ const ServicesSection = () => {
       'Advanced Analytics',
       'AI Product Recommendations',
       '3 Team Accounts'
+        ]
     }
   ];
 
