@@ -21,10 +21,10 @@ const ClientIntakeForm = ({ onSubmit }: ClientIntakeFormProps) => {
   });
 
   const plans = {
-    basic: { name: 'Basic', monthlyFee: 25, annualFee: 270, features: ['Basic website', 'Up to 5 pages'] },
-    starter: { name: 'Starter', monthlyFee: 35, annualFee: 378, features: ['Standard website', 'Up to 10 pages', 'SEO optimization'] },
-    business: { name: 'Business', monthlyFee: 69, annualFee: 745, features: ['Advanced website', 'Up to 20 pages', 'E-commerce ready', 'Priority support'] },
-    premium: { name: 'Premium', monthlyFee: 159, annualFee: 1717, features: ['Custom website', 'Unlimited pages', 'Dedicated support', 'Marketing consultation'] }
+    basic: { name: 'Basic', monthlyFee: 25, annualFee: 270, features: ['Basic website', 'Up to 3 pages', 'Mobile Responsive', 'Domain Support', 'Basic SEO'] },
+    starter: { name: 'Starter', monthlyFee: 35, annualFee: 378, features: ['Basic package +','Standard website', 'Up to 5 pages', 'SEO optimization', 'Enhandced SEO', 'Social Media Integration', 'Stripe/paypal integration(3% transaction fee)'] },
+    business: { name: 'Business', monthlyFee: 69, annualFee: 745, features: ['Starter package +','Advanced website', 'Up to 7 pages', 'E-commerce ready', 'Priority support','Enhanced UI and Animations','Google Analytics Integration'] },
+    premium: { name: 'Premium', monthlyFee: 159, annualFee: 1717, features: ['Business package + ','Custom website', '14 pages', 'Dedicated support', 'Marketing consultation','Advacned SEO', '3 Team Accounts'] }
   };
 
   const handlePlanSelect = (plan: 'basic' | 'starter' | 'business' | 'premium') => {
