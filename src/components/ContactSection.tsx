@@ -48,7 +48,7 @@ const ContactSection = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, url: "https://facebook.com/getseensites", label: "Facebook" },
+    { icon: Facebook, url: "https://www.facebook.com/profile.php?id=61577312487408&sk=grid", label: "Facebook" },
     { icon: Twitter, url: "https://twitter.com/getseensites", label: "Twitter" },
     { icon: Instagram, url: "https://instagram.com/getseensites", label: "Instagram" },
     { icon: Linkedin, url: "https://linkedin.com/company/getseensites", label: "LinkedIn" }
