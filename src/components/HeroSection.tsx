@@ -152,7 +152,7 @@ const HeroSection = () => {
             >
               {/* Main showcase card */}
               <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-orange-500/20 shadow-2xl">
-                <h3 className="text-2xl font-bold text-white mb-6">Real Results for Real Business Owners</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">Real Results for Real Businesses</h3>
                 
                 {/* Testimonial with image */}
                 <div className="space-y-6">
@@ -163,7 +163,7 @@ const HeroSection = () => {
                       className="w-16 h-16 rounded-xl object-cover"
                     />
                     <div>
-                      <div className="text-white font-semibold">Rudy</div>
+                      <div className="text-white font-semibold">Rudy Martinez</div>
                       <div className="text-orange-300 text-sm">RudeBoyBlendz Barbershop</div>
                     </div>
                   </div>
@@ -177,7 +177,7 @@ const HeroSection = () => {
                 <div className="mt-8 space-y-3">
                   {[
                     'A modern, mobile-optimized site that looks amazing on every device',
-                    'Fast turnaround—live in less than 2 weeks',
+                    'Fast turnaround—live in about 2 weeks',
                     'Clear pricing, no surprises'
                   ].map((feature, index) => (
                     <motion.div
@@ -201,7 +201,7 @@ const HeroSection = () => {
                 transition={{ delay: 1.5, duration: 0.6 }}
                 className="absolute -top-4 -right-4 bg-orange-gradient rounded-2xl p-4 text-center shadow-xl"
               >
-                <div className="text-2xl font-bold text-white">2-3 Weeks</div>
+                <div className="text-2xl font-bold text-white">1-2 Weeks</div>
                 <div className="text-white/90 text-xs font-medium">Avg. Delivery</div>
               </motion.div>
 
