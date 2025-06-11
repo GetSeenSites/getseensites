@@ -12,6 +12,7 @@ import WebsitesPage from "./pages/WebsitesPage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 import CosmicSidebar from "./components/CosmicSidebar";
+import MobileNavbar from "./components/MobileNavbar";
 
 const queryClient = new QueryClient();
 
@@ -22,9 +23,17 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="flex min-h-screen">
-            <CosmicSidebar />
-            <main className="flex-1 ml-16">
+          <div className="flex min-h-screen w-full">
+            {/* Desktop Sidebar - Hidden on mobile */}
+            <div className="hidden md:block">
+              <CosmicSidebar />
+            </div>
+            
+            {/* Mobile Navbar - Only shown on mobile */}
+            <MobileNavbar />
+            
+            {/* Main Content */}
+            <main className="flex-1 md:ml-16 pt-16 md:pt-0 w-full min-w-0">
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/dashboard" element={<Dashboard />} />
