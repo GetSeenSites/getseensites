@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { Upload, X, Image, AlertCircle } from 'lucide-react';
 
 interface ImageUploadProps {
-  files: File[];
   onFilesChange: (files: File[]) => void;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ files, onFilesChange }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ onFilesChange }) => {
+  const [files, setFiles] = useState<File[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string>("");
 
@@ -45,13 +45,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ files, onFilesChange }) => {
   const handleFileUpload = (newFiles: FileList | null) => {
     const validFiles = validateFiles(newFiles);
     if (validFiles.length > 0) {
-      onFilesChange([...files, ...validFiles]);
+      const updatedFiles = [...files, ...validFiles];
+      setFiles(updatedFiles);
+      onFilesChange(updatedFiles);
       setError("");
     }
   };
 
   const removeFile = (index: number) => {
-    onFilesChange(files.filter((_, i) => i !== index));
+    const updatedFiles = files.filter((_, i) => i !== index);
+    setFiles(updatedFiles);
+    onFilesChange(updatedFiles);
     setError("");
   };
 
@@ -81,10 +85,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ files, onFilesChange }) => {
   return (
     <div className="space-y-4">
       <div className="text-center">
-        <h3 className="text-2xl font-semibold text-white mb-2">
+        <h3 className="text-2xl font-semibold text-gray-900 mb-2">
           Upload Images for Your Website
         </h3>
-        <p className="text-white/70 text-lg">
+        <p className="text-gray-600 text-lg">
           Share any photos you'd like us to use in your website design
         </p>
       </div>
@@ -93,17 +97,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ files, onFilesChange }) => {
         className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${
           dragActive 
             ? 'border-orange-400 bg-orange-500/20 scale-102' 
-            : 'border-white/30 hover:border-orange-400/60 hover:bg-white/5'
+            : 'border-gray-300 hover:border-orange-400/60 hover:bg-gray-50'
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
-        <Upload className="w-16 h-16 text-white/60 mx-auto mb-6" />
-        <p className="text-white/80 mb-4 text-lg">
+        <Upload className="w-16 h-16 text-gray-400 mx-auto mb-6" />
+        <p className="text-gray-600 mb-4 text-lg">
           Drag and drop your images here, or{' '}
-          <label className="text-orange-400 cursor-pointer hover:text-orange-300 font-semibold underline">
+          <label className="text-orange-500 cursor-pointer hover:text-orange-600 font-semibold underline">
             browse files
             <input
               type="file"
@@ -114,7 +118,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ files, onFilesChange }) => {
             />
           </label>
         </p>
-        <div className="space-y-2 text-white/60">
+        <div className="space-y-2 text-gray-500">
           <p className="text-sm">
             Supported formats: JPG, PNG, WebP
           </p>
@@ -125,23 +129,23 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ files, onFilesChange }) => {
       </div>
 
       {error && (
-        <div className="flex items-center space-x-2 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
-          <AlertCircle className="w-5 h-5 text-red-300" />
-          <p className="text-red-200">{error}</p>
+        <div className="flex items-center space-x-2 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <AlertCircle className="w-5 h-5 text-red-500" />
+          <p className="text-red-700">{error}</p>
         </div>
       )}
 
       {files.length > 0 && (
         <div className="space-y-3">
-          <h4 className="font-semibold text-white text-lg">Uploaded Images ({files.length}):</h4>
+          <h4 className="font-semibold text-gray-900 text-lg">Uploaded Images ({files.length}):</h4>
           <div className="grid gap-3 max-h-60 overflow-y-auto">
             {files.map((file, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+              <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <div className="flex items-center space-x-3">
-                  <Image className="w-5 h-5 text-orange-400" />
+                  <Image className="w-5 h-5 text-orange-500" />
                   <div>
-                    <span className="text-white font-medium">{file.name}</span>
-                    <p className="text-white/60 text-sm">
+                    <span className="text-gray-900 font-medium">{file.name}</span>
+                    <p className="text-gray-500 text-sm">
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
@@ -149,7 +153,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ files, onFilesChange }) => {
                 <button
                   type="button"
                   onClick={() => removeFile(index)}
-                  className="text-red-400 hover:text-red-300 transition-colors p-1"
+                  className="text-red-500 hover:text-red-700 transition-colors p-1"
                 >
                   <X className="w-5 h-5" />
                 </button>
