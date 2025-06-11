@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Check, ArrowRight, Star, Zap, Shield, Crown } from 'lucide-react';
 
@@ -89,11 +88,6 @@ const PricingSection = () => {
       name: "AI Chatbot",
       price: 200,
       description: "24/7 AI Chatbot that deals with FAQs"
-    },
-    {
-      name: "Maintenance",
-      price: 30,
-      description: "Monthly website maintenance and updates"
     }
   ];
 
