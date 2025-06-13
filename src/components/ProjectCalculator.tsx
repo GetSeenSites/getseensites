@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 interface ProjectCalculatorProps {
   selectedPlan: 'basic' | 'starter' | 'business' | 'premium';
   pageCount: number;
-  billing: 'monthly' | 'annual';
   addOns: {
     logo: boolean;
     content: boolean;
@@ -13,7 +12,7 @@ interface ProjectCalculatorProps {
   };
 }
 
-const ProjectCalculator = ({ selectedPlan, pageCount, billing, addOns }: ProjectCalculatorProps) => {
+const ProjectCalculator = ({ selectedPlan, pageCount, addOns }: ProjectCalculatorProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -25,31 +24,30 @@ const ProjectCalculator = ({ selectedPlan, pageCount, billing, addOns }: Project
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Updated pricing to match homepage exactly - monthly only
   const planPrices = {
-    basic: { setupFee: 199, monthlyFee: 25, annualFee: 270 },
-    starter: { setupFee: 249, monthlyFee: 35, annualFee: 378 },
-    business: { setupFee: 349, monthlyFee: 69, annualFee: 745 },
-    premium: { setupFee: 649, monthlyFee: 159, annualFee: 1717 }
+    basic: { setupFee: 149, monthlyFee: 49 },
+    starter: { setupFee: 249, monthlyFee: 99 },
+    business: { setupFee: 399, monthlyFee: 199 },
+    premium: { setupFee: 999, monthlyFee: 299 }
   };
 
   const addOnPrices = {
-    logo: 20,
-    content: 25,
-    chatbot: 275
+    logo: 150,
+    content: 50,
+    chatbot: 299
   };
 
   const selectedPlanDetails = planPrices[selectedPlan];
   const setupFee = selectedPlanDetails.setupFee;
-  const planFee = billing === 'annual' ? selectedPlanDetails.annualFee : selectedPlanDetails.monthlyFee;
+  const monthlyFee = selectedPlanDetails.monthlyFee;
   
   const logoPrice = addOns.logo ? addOnPrices.logo : 0;
   const contentPrice = addOns.content ? addOnPrices.content * pageCount : 0;
   const chatbotPrice = addOns.chatbot ? addOnPrices.chatbot : 0;
 
-  const monthlyTotal = billing === 'monthly' ? planFee : 0;
   const oneTimeTotal = setupFee + logoPrice + contentPrice + chatbotPrice;
-  const recurringTotal = billing === 'annual' ? planFee : monthlyTotal;
-  const totalProject = oneTimeTotal + (billing === 'annual' ? planFee : planFee);
+  const totalToday = oneTimeTotal + monthlyFee;
 
   if (!selectedPlan) return null;
 
@@ -68,8 +66,8 @@ const ProjectCalculator = ({ selectedPlan, pageCount, billing, addOns }: Project
         <div className="space-y-3 mb-4">
           <div className="border-b border-orange-500/20 pb-2">
             <div className="flex justify-between text-white text-sm sm:text-base">
-              <span className="capitalize">{selectedPlan} Plan ({billing})</span>
-              <span>${billing === 'annual' ? selectedPlanDetails.annualFee : selectedPlanDetails.monthlyFee}</span>
+              <span className="capitalize">{selectedPlan} Plan</span>
+              <span>${monthlyFee}/mo</span>
             </div>
           </div>
           
@@ -101,19 +99,17 @@ const ProjectCalculator = ({ selectedPlan, pageCount, billing, addOns }: Project
         </div>
         
         <div className="border-t border-orange-500/20 pt-4 space-y-2">
-          {billing === 'monthly' && monthlyTotal > 0 && (
-            <div className="flex justify-between text-white font-semibold text-sm sm:text-base">
-              <span>Monthly:</span>
-              <span>${monthlyTotal}</span>
-            </div>
-          )}
           <div className="flex justify-between text-white font-semibold text-sm sm:text-base">
-            <span>One-time:</span>
+            <span>Monthly:</span>
+            <span>${monthlyFee}</span>
+          </div>
+          <div className="flex justify-between text-white font-semibold text-sm sm:text-base">
+            <span>Setup + Add-ons:</span>
             <span>${oneTimeTotal}</span>
           </div>
           <div className="flex justify-between text-orange-500 font-bold text-base sm:text-lg border-t border-orange-500/20 pt-2">
             <span>Total Today:</span>
-            <span>${oneTimeTotal + (billing === 'annual' ? planFee : planFee)}</span>
+            <span>${totalToday}</span>
           </div>
         </div>
       </div>
