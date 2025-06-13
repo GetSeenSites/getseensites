@@ -12,7 +12,6 @@ interface ClientIntakeFormProps {
 
 const ClientIntakeForm = ({ onSubmit }: ClientIntakeFormProps) => {
   const [selectedPlan, setSelectedPlan] = useState<'basic' | 'starter' | 'business' | 'premium'>('starter');
-  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly');
   const [pageCount, setPageCount] = useState(5);
   const [addOns, setAddOns] = useState({
     logo: false,
@@ -20,19 +19,63 @@ const ClientIntakeForm = ({ onSubmit }: ClientIntakeFormProps) => {
     chatbot: false
   });
 
+  // Updated plans to match homepage pricing exactly - monthly only
   const plans = {
-    basic: { name: 'Basic', monthlyFee: 25, annualFee: 270, features: ['Basic website', 'Up to 3 pages', 'Mobile Responsive', 'Domain Support', 'Basic SEO'] },
-    starter: { name: 'Starter', monthlyFee: 35, annualFee: 378, features: ['Basic package +','Standard website', 'Up to 5 pages', 'SEO optimization', 'Enhandced SEO', 'Social Media Integration', 'Stripe/paypal integration(3% transaction fee)'] },
-    business: { name: 'Business', monthlyFee: 69, annualFee: 745, features: ['Starter package +','Advanced website', 'Up to 7 pages', 'E-commerce ready', 'Priority support','Enhanced UI and Animations','Google Analytics Integration'] },
-    premium: { name: 'Premium', monthlyFee: 159, annualFee: 1717, features: ['Business package + ','Custom website', '14 pages', 'Dedicated support', 'Marketing consultation','Advacned SEO', '3 Team Accounts'] }
+    basic: { 
+      name: 'Basic', 
+      monthlyFee: 49,
+      setupFee: 149,
+      features: [
+        'Mobile-optimized 3-page site',
+        'Hosted and secured', 
+        'Live in 3-5 days',
+        ' Done-for-you launch, no tech headaches'
+      ] 
+    },
+    starter: { 
+      name: 'Starter', 
+      monthlyFee: 99,
+      setupFee: 249,
+      features: [
+        'All Basic features +',
+        '5-page high-converting layout',
+        'Booking setup (Calendly, Square, or custom)',
+        'Stripe payments integration (2% Transaction Fee)',
+        'Social media links + Instagram feed',
+        ' Looks professional. Works like a sales tool.'
+      ] 
+    },
+    business: { 
+      name: 'Business', 
+      monthlyFee: 199,
+      setupFee: 399,
+      features: [
+        'All Starter features +',
+        'Full e-commerce store (unlimited products)',
+        'Lead capture + email marketing',
+        'Abandoned cart recovery',
+        'CRM + Analytics dashboard',
+        ' Real infrastructure for growth'
+      ] 
+    },
+    premium: { 
+      name: 'Premium', 
+      monthlyFee: 299,
+      setupFee: 999,
+      features: [
+        'All Business features +',
+        'Custom design tailored to brand',
+        'Built-in AI chatbot',
+        'Advanced SEO + fast load times',
+        'Smart product recommendations, analytics',
+        'Priority support',
+        ' Your business, on autopilot.'
+      ] 
+    }
   };
 
   const handlePlanSelect = (plan: 'basic' | 'starter' | 'business' | 'premium') => {
     setSelectedPlan(plan);
-  };
-
-  const handleBillingChange = (bill: 'monthly' | 'annual') => {
-    setBilling(bill);
   };
 
   const handleAddOnChange = (addon: 'logo' | 'content' | 'chatbot') => {
@@ -42,18 +85,6 @@ const ClientIntakeForm = ({ onSubmit }: ClientIntakeFormProps) => {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold mb-4">Select Billing Cycle</h2>
-        <div className="flex items-center space-x-4">
-          <Button variant={billing === 'monthly' ? 'default' : 'outline'} onClick={() => handleBillingChange('monthly')}>
-            Monthly
-          </Button>
-          <Button variant={billing === 'annual' ? 'default' : 'outline'} onClick={() => handleBillingChange('annual')}>
-            Annual
-          </Button>
-        </div>
-      </div>
-
-      <div>
         <h2 className="text-2xl font-bold mb-4">Choose Your Plan</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {Object.entries(plans).map(([key, plan]) => (
@@ -61,7 +92,12 @@ const ClientIntakeForm = ({ onSubmit }: ClientIntakeFormProps) => {
               <CardHeader>
                 <CardTitle className="text-lg font-semibold">{plan.name}</CardTitle>
                 <CardDescription>
-                  {billing === 'monthly' ? `$${plan.monthlyFee}/month` : `$${plan.annualFee}/year`}
+                  <div className="text-lg font-bold text-primary">
+                    ${plan.monthlyFee}/mo
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    + ${plan.setupFee} setup fee
+                  </div>
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -85,7 +121,6 @@ const ClientIntakeForm = ({ onSubmit }: ClientIntakeFormProps) => {
       <ProjectCalculator 
         selectedPlan={selectedPlan}
         pageCount={pageCount}
-        billing={billing}
         addOns={addOns}
       />
     </div>
