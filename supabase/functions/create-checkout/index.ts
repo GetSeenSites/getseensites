@@ -30,8 +30,13 @@ serve(async (req) => {
     logStep("Form data received", { 
       plan: formData.selectedPlan, 
       addons: Object.entries(formData.addOns || {}).filter(([_, value]) => value).map(([key, _]) => key),
-      email: formData.email
+      email: formData.email,
+      pageCount: formData.pageCount
     });
+
+    if (!formData.email || !formData.selectedPlan) {
+      throw new Error("Missing required form data: email and selectedPlan are required");
+    }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
 
@@ -44,13 +49,13 @@ serve(async (req) => {
     } else {
       const customer = await stripe.customers.create({
         email: formData.email,
-        name: formData.companyName
+        name: formData.companyName || formData.email
       });
       customerId = customer.id;
       logStep("New customer created", { customerId });
     }
 
-    // Updated package pricing to match homepage - monthly only
+    // Package pricing - monthly only
     const packagePricing = {
       'basic': { monthlyFee: 49, setupFee: 149 },
       'starter': { monthlyFee: 99, setupFee: 249 },
@@ -74,9 +79,8 @@ serve(async (req) => {
     const monthlyFee = selectedPlan.monthlyFee;
     const setupFee = selectedPlan.setupFee;
 
-    // Calculate totals
-    let oneTimeTotal = setupFee; // Include setup fee in one-time total
-    let monthlyTotal = monthlyFee;
+    // Calculate one-time charges (setup + add-ons)
+    let oneTimeTotal = setupFee;
 
     // Add one-time add-ons
     Object.entries(formData.addOns || {}).forEach(([addon, enabled]) => {
@@ -92,7 +96,7 @@ serve(async (req) => {
       }
     });
 
-    logStep("Calculated totals", { oneTimeTotal, monthlyTotal, setupFee });
+    logStep("Calculated totals", { oneTimeTotal, monthlyFee, setupFee });
 
     // Create line items
     const lineItems = [];
@@ -104,7 +108,7 @@ serve(async (req) => {
           currency: "usd",
           product_data: {
             name: `Setup Fee + Add-ons for ${formData.selectedPlan} plan`,
-            description: `Setup fee and one-time add-ons`
+            description: `Setup fee and one-time add-ons for ${formData.companyName || formData.email}`
           },
           unit_amount: oneTimeTotal * 100, // Convert to cents
         },
@@ -120,7 +124,7 @@ serve(async (req) => {
           name: `${formData.selectedPlan.charAt(0).toUpperCase() + formData.selectedPlan.slice(1)} Plan - Monthly`,
           description: `Monthly subscription for ${formData.selectedPlan} plan`
         },
-        unit_amount: monthlyTotal * 100,
+        unit_amount: monthlyFee * 100,
         recurring: { interval: "month" },
       },
       quantity: 1,
@@ -135,16 +139,17 @@ serve(async (req) => {
       success_url: `${origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/intake?canceled=true`,
       metadata: {
-        submission_id: formData.submissionId,
+        submission_id: formData.submissionId || 'unknown',
         selected_plan: formData.selectedPlan,
         billing_type: 'monthly',
-        company_name: formData.companyName
+        company_name: formData.companyName || formData.email,
+        page_count: String(formData.pageCount || 1)
       }
     });
 
     logStep("Checkout session created", { sessionId: session.id, url: session.url });
 
-    // Update intake submission with Stripe session ID
+    // Update intake submission with Stripe session ID if submissionId exists
     if (formData.submissionId) {
       const { error: updateError } = await supabaseClient
         .from('intake_submissions')
@@ -170,7 +175,7 @@ serve(async (req) => {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    logStep("ERROR", { message: errorMessage });
+    logStep("ERROR", { message: errorMessage, stack: error instanceof Error ? error.stack : undefined });
     return new Response(JSON.stringify({ error: errorMessage }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
