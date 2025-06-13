@@ -48,7 +48,7 @@ const plans = {
       'Mobile-optimized 3-page site',
       'Hosted and secured',
       'Live in 3-5 days',
-      ' Done-for-you launch, no tech headaches'
+      '✅ Done-for-you launch, no tech headaches'
     ] 
   },
   starter: { 
@@ -62,7 +62,7 @@ const plans = {
       'Booking setup (Calendly, Square, or custom)',
       'Stripe payments integration (2% Transaction Fee)',
       'Social media links + Instagram feed',
-      ' Looks professional. Works like a sales tool.'
+      '✅ Looks professional. Works like a sales tool.'
     ] 
   },
   business: { 
@@ -76,7 +76,7 @@ const plans = {
       'Lead capture + email marketing',
       'Abandoned cart recovery',
       'CRM + Analytics dashboard',
-      ' Real infrastructure for growth'
+      '✅ Real infrastructure for growth'
     ] 
   },
   premium: { 
@@ -91,7 +91,7 @@ const plans = {
       'Advanced SEO + fast load times',
       'Smart product recommendations, analytics',
       'Priority support',
-      ' Your business, on autopilot.'
+      '✅ Your business, on autopilot.'
     ] 
   }
 };
@@ -250,34 +250,45 @@ const IntakePage = () => {
     setIsSubmitting(true);
     
     try {
+      console.log("Starting form submission process...");
+      
       // Upload files to Supabase storage
       const uploadedFiles = [];
       for (const file of formData.logoFiles) {
-        // Sanitize filename
-        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-        const filePath = `${Date.now()}-${sanitizedName}`;
-        
-        const { data, error } = await supabase.storage
-          .from('intake-uploads')
-          .upload(filePath, file, {
-            cacheControl: '3600',
-            upsert: false
-          });
+        try {
+          // Sanitize filename
+          const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+          const filePath = `${Date.now()}-${sanitizedName}`;
+          
+          const { data, error } = await supabase.storage
+            .from('intake-uploads')
+            .upload(filePath, file, {
+              cacheControl: '3600',
+              upsert: false
+            });
 
-        if (error) {
-          console.error('Error uploading file:', error);
-          toast.error(`Error uploading ${file.name}`);
+          if (error) {
+            console.error('Error uploading file:', error);
+            toast.error(`Error uploading ${file.name}`);
+            setIsSubmitting(false);
+            return;
+          }
+
+          uploadedFiles.push({
+            name: file.name,
+            path: data.path,
+            size: file.size,
+            type: file.type
+          });
+        } catch (uploadError) {
+          console.error('File upload exception:', uploadError);
+          toast.error(`Failed to upload ${file.name}`);
           setIsSubmitting(false);
           return;
         }
-
-        uploadedFiles.push({
-          name: file.name,
-          path: data.path,
-          size: file.size,
-          type: file.type
-        });
       }
+
+      console.log("Files uploaded successfully:", uploadedFiles.length);
 
       // Get current user (may be null for guest submissions)
       const { data: { user } } = await supabase.auth.getUser();
@@ -309,80 +320,107 @@ const IntakePage = () => {
 
       if (insertError) {
         console.error('Error saving submission:', insertError);
-        toast.error('Error saving form data');
+        toast.error('Error saving form data. Please try again.');
         setIsSubmitting(false);
         return;
       }
 
-      // Send email notification
-      const emailFiles = await Promise.all(
-        uploadedFiles.map(async (file) => {
-          const { data } = await supabase.storage
-            .from('intake-uploads')
-            .download(file.path);
-          
-          if (data) {
-            const arrayBuffer = await data.arrayBuffer();
-            const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-            return {
-              name: file.name,
-              content: base64,
-              type: file.type
-            };
+      console.log("Form submission saved to database:", submission.id);
+
+      // Send email notification first
+      try {
+        const emailFiles = await Promise.all(
+          uploadedFiles.map(async (file) => {
+            try {
+              const { data } = await supabase.storage
+                .from('intake-uploads')
+                .download(file.path);
+              
+              if (data) {
+                const arrayBuffer = await data.arrayBuffer();
+                const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+                return {
+                  name: file.name,
+                  content: base64,
+                  type: file.type
+                };
+              }
+              return null;
+            } catch (error) {
+              console.error('Error processing file for email:', error);
+              return null;
+            }
+          })
+        );
+
+        const validEmailFiles = emailFiles.filter(file => file !== null);
+
+        const { error: emailError } = await supabase.functions.invoke('send-intake-email', {
+          body: {
+            formData: {
+              ...formData,
+              submissionId: submission.id,
+              pricing: calculatePricing()
+            },
+            files: validEmailFiles
           }
-          return null;
-        })
-      );
+        });
 
-      const validEmailFiles = emailFiles.filter(file => file !== null);
-
-      await supabase.functions.invoke('send-intake-email', {
-        body: {
-          formData: {
-            ...formData,
-            submissionId: submission.id,
-            pricing: calculatePricing()
-          },
-          files: validEmailFiles
+        if (emailError) {
+          console.error('Email sending error:', emailError);
+          // Don't stop the process for email errors, just log it
+        } else {
+          console.log("Email sent successfully");
         }
-      });
+      } catch (emailError) {
+        console.error('Email process error:', emailError);
+        // Continue with checkout even if email fails
+      }
 
       // Create Stripe checkout session
+      console.log("Creating Stripe checkout session...");
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
         body: {
           formData: {
             ...formData,
-            submissionId: submission.id,
-            selectedPackage: formData.selectedPlan,
-            selectedAddons: Object.entries(formData.addOns)
-              .filter(([_, value]) => value)
-              .map(([key, _]) => key),
-            billing: 'monthly' // Always monthly now
+            submissionId: submission.id
           }
         }
       });
 
       if (checkoutError) {
         console.error('Error creating checkout:', checkoutError);
-        toast.error('Error creating payment session');
+        toast.error(`Payment setup failed: ${checkoutError.message || 'Unknown error'}`);
         setIsSubmitting(false);
         return;
       }
 
+      if (!checkoutData?.url) {
+        console.error('No checkout URL received:', checkoutData);
+        toast.error('Payment setup failed: No checkout URL received');
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log("Checkout session created successfully:", checkoutData.sessionId);
+
       // Update submission with Stripe session ID
-      await supabase
-        .from('intake_submissions')
-        .update({ stripe_session_id: checkoutData.sessionId })
-        .eq('id', submission.id);
+      if (checkoutData.sessionId) {
+        await supabase
+          .from('intake_submissions')
+          .update({ stripe_session_id: checkoutData.sessionId })
+          .eq('id', submission.id);
+      }
 
       toast.success("Form submitted successfully! Redirecting to payment...");
       
       // Redirect to Stripe checkout
+      console.log("Redirecting to Stripe checkout:", checkoutData.url);
       window.location.href = checkoutData.url;
 
     } catch (error) {
       console.error("Submission error:", error);
-      toast.error("An error occurred during submission.");
+      toast.error(`An error occurred: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setIsSubmitting(false);
     }
   };
