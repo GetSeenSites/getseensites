@@ -30,7 +30,6 @@ serve(async (req) => {
     logStep("Form data received", { 
       plan: formData.selectedPlan, 
       addons: Object.entries(formData.addOns || {}).filter(([_, value]) => value).map(([key, _]) => key),
-      billing: formData.billing,
       email: formData.email
     });
 
@@ -51,20 +50,19 @@ serve(async (req) => {
       logStep("New customer created", { customerId });
     }
 
-    // Updated package pricing with no setup fees
+    // Updated package pricing to match homepage - monthly only
     const packagePricing = {
-      'basic': { monthlyFee: 25, annualFee: 270 },
-      'starter': { monthlyFee: 35, annualFee: 378 },
-      'business': { monthlyFee: 69, annualFee: 745 },
-      'premium': { monthlyFee: 159, annualFee: 1717 }
+      'basic': { monthlyFee: 49, setupFee: 149 },
+      'starter': { monthlyFee: 99, setupFee: 249 },
+      'business': { monthlyFee: 199, setupFee: 399 },
+      'premium': { monthlyFee: 299, setupFee: 999 }
     };
 
     // Add-on pricing
     const addonPricing = {
-      'logo': { price: 20, type: 'one-time' },
-      'chatbot': { price: 275, type: 'one-time' },
-      'content': { price: 25, type: 'one-time' },
-      'maintenance': { price: 20, type: 'monthly' }
+      'logo': { price: 150, type: 'one-time' },
+      'chatbot': { price: 299, type: 'one-time' },
+      'content': { price: 50, type: 'one-time' }
     };
 
     const selectedPlan = packagePricing[formData.selectedPlan];
@@ -73,14 +71,14 @@ serve(async (req) => {
       throw new Error(`Invalid package selected: ${formData.selectedPlan}`);
     }
 
-    const isAnnual = formData.billing === 'annual';
-    const planFee = isAnnual ? selectedPlan.annualFee : selectedPlan.monthlyFee;
+    const monthlyFee = selectedPlan.monthlyFee;
+    const setupFee = selectedPlan.setupFee;
 
     // Calculate totals
-    let oneTimeTotal = 0;
-    let monthlyTotal = isAnnual ? 0 : selectedPlan.monthlyFee;
+    let oneTimeTotal = setupFee; // Include setup fee in one-time total
+    let monthlyTotal = monthlyFee;
 
-    // Add one-time add-ons and monthly add-ons
+    // Add one-time add-ons
     Object.entries(formData.addOns || {}).forEach(([addon, enabled]) => {
       if (enabled && addonPricing[addon]) {
         const addonDetails = addonPricing[addon];
@@ -90,25 +88,23 @@ serve(async (req) => {
           } else {
             oneTimeTotal += addonDetails.price;
           }
-        } else if (addonDetails.type === 'monthly' && !isAnnual) {
-          monthlyTotal += addonDetails.price;
         }
       }
     });
 
-    logStep("Calculated totals", { oneTimeTotal, monthlyTotal, planFee, isAnnual });
+    logStep("Calculated totals", { oneTimeTotal, monthlyTotal, setupFee });
 
     // Create line items
     const lineItems = [];
 
-    // Add one-time add-ons if any
+    // Add one-time charges (setup + add-ons)
     if (oneTimeTotal > 0) {
       lineItems.push({
         price_data: {
           currency: "usd",
           product_data: {
-            name: `One-time Add-ons`,
-            description: `Add-ons for ${formData.selectedPlan} plan`
+            name: `Setup Fee + Add-ons for ${formData.selectedPlan} plan`,
+            description: `Setup fee and one-time add-ons`
           },
           unit_amount: oneTimeTotal * 100, // Convert to cents
         },
@@ -116,48 +112,32 @@ serve(async (req) => {
       });
     }
 
-    // Add subscription (monthly or annual)
-    if (isAnnual) {
-      // Annual billing - add as one-time payment for the year
-      lineItems.push({
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: `${formData.selectedPlan.charAt(0).toUpperCase() + formData.selectedPlan.slice(1)} Plan - Annual`,
-            description: `Annual subscription for ${formData.selectedPlan} plan`
-          },
-          unit_amount: planFee * 100,
+    // Add monthly subscription
+    lineItems.push({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: `${formData.selectedPlan.charAt(0).toUpperCase() + formData.selectedPlan.slice(1)} Plan - Monthly`,
+          description: `Monthly subscription for ${formData.selectedPlan} plan`
         },
-        quantity: 1,
-      });
-    } else {
-      // Monthly billing - add as recurring subscription
-      lineItems.push({
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: `${formData.selectedPlan.charAt(0).toUpperCase() + formData.selectedPlan.slice(1)} Plan - Monthly`,
-            description: `Monthly subscription for ${formData.selectedPlan} plan including monthly add-ons`
-          },
-          unit_amount: monthlyTotal * 100,
-          recurring: { interval: "month" },
-        },
-        quantity: 1,
-      });
-    }
+        unit_amount: monthlyTotal * 100,
+        recurring: { interval: "month" },
+      },
+      quantity: 1,
+    });
 
     const origin = req.headers.get("origin") || "http://localhost:3000";
     
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: lineItems,
-      mode: isAnnual ? "payment" : "subscription",
+      mode: "subscription",
       success_url: `${origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/intake?canceled=true`,
       metadata: {
         submission_id: formData.submissionId,
         selected_plan: formData.selectedPlan,
-        billing_type: formData.billing || 'monthly',
+        billing_type: 'monthly',
         company_name: formData.companyName
       }
     });
