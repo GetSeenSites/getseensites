@@ -30,7 +30,6 @@ interface FormData {
   exampleWebsites: string;
   selectedPlan: 'basic' | 'starter' | 'business' | 'premium';
   pageCount: number;
-  billing: 'monthly' | 'annual';
   addOns: {
     logo: boolean;
     content: boolean;
@@ -38,70 +37,69 @@ interface FormData {
   };
 }
 
-// Updated pricing to match Services section with no setup fees
+// Updated pricing to match Services section exactly - monthly only
 const plans = {
   basic: { 
     name: 'Basic', 
-    monthlyFee: 25, 
-    annualFee: 270, 
+    monthlyFee: 49,
+    setupFee: 149,
+    maxPages: 3,
     features: [
-      '3 Templates(Ground-level Custimization)',
-      'Up to 3 pages',
-      'Mobile responsive',
-      'Basic SEO',
-      'SSL certificate',
-      'Domain Support'
+      'Mobile-optimized 3-page site',
+      'Hosted and secured',
+      'Live in 3-5 days',
+      ' Done-for-you launch, no tech headaches'
     ] 
   },
   starter: { 
     name: 'Starter', 
-    monthlyFee: 35, 
-    annualFee: 378, 
+    monthlyFee: 99,
+    setupFee: 249,
+    maxPages: 5,
     features: [
-      'Basic Features +',
-      '10 Templates (Moderate customization)',
-      'Up to 5 pages',
-      'E-commerce(10 products)(3% Transaction Fee)',
-      'Stripe Integration (Payment Proceccing)',
-      'Booking/Signup Setup',
-      'Social media integration'
+      'All Basic features +',
+      '5-page high-converting layout',
+      'Booking setup (Calendly, Square, or custom)',
+      'Stripe payments integration (2% Transaction Fee)',
+      'Social media links + Instagram feed',
+      ' Looks professional. Works like a sales tool.'
     ] 
   },
   business: { 
     name: 'Business', 
-    monthlyFee: 69, 
-    annualFee: 745, 
+    monthlyFee: 199,
+    setupFee: 399,
+    maxPages: 10,
     features: [
-      'Starter Features +',
-      'Advanced SEO',
-      'Up to 9 pages',
-      'E-commerce(unlimited products, Abandoned Cart Recovery, 1% Transaction Fee)',
-      'Increased support',
-      'Analytics dashboard',
-      'Custom integrations'
+      'All Starter features +',
+      'Full e-commerce store (unlimited products)',
+      'Lead capture + email marketing',
+      'Abandoned cart recovery',
+      'CRM + Analytics dashboard',
+      ' Real infrastructure for growth'
     ] 
   },
   premium: { 
     name: 'Premium', 
-    monthlyFee: 159, 
-    annualFee: 1717, 
+    monthlyFee: 299,
+    setupFee: 999,
+    maxPages: Infinity,
     features: [
-      'Business Features +',
-      'Custom website',
-      'Unlimited Pages',
-      'Priority Support(1-hour Support Repsonse Time (Within Working Hours))',
-      'Advanced SEO',
-      'Advanced Analytics',
-      'AI Product Recommendations',
-      '3 Team Accounts'
+      'All Business features +',
+      'Custom design tailored to brand',
+      'Built-in AI chatbot',
+      'Advanced SEO + fast load times',
+      'Smart product recommendations, analytics',
+      'Priority support',
+      ' Your business, on autopilot.'
     ] 
   }
 };
 
 const addOnPrices = {
-  logo: 20,
-  content: 25,
-  chatbot: 275
+  logo: 150,
+  content: 50,
+  chatbot: 299
 };
 
 const IntakePage = () => {
@@ -120,7 +118,6 @@ const IntakePage = () => {
     exampleWebsites: '',
     selectedPlan: 'starter',
     pageCount: 5,
-    billing: 'monthly',
     addOns: {
       logo: false,
       content: false,
@@ -130,6 +127,14 @@ const IntakePage = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validatePageCount = (pageCount: number, selectedPlan: string) => {
+    const plan = plans[selectedPlan as keyof typeof plans];
+    if (plan && plan.maxPages !== Infinity && pageCount > plan.maxPages) {
+      return `You can only select up to ${plan.maxPages} pages on the ${plan.name} plan.`;
+    }
+    return '';
+  };
 
   const validateStep = (step: number) => {
     const newErrors: Record<string, string> = {};
@@ -145,6 +150,11 @@ const IntakePage = () => {
         if (!formData.businessDescription.trim()) newErrors.businessDescription = 'Business description is required';
         if (!formData.targetAudience.trim()) newErrors.targetAudience = 'Target audience is required';
         break;
+      case 5:
+        // Validate page count for step 5 (plan selection)
+        const pageCountError = validatePageCount(formData.pageCount, formData.selectedPlan);
+        if (pageCountError) newErrors.pageCount = pageCountError;
+        break;
     }
     
     setErrors(newErrors);
@@ -159,14 +169,15 @@ const IntakePage = () => {
     if (formData.addOns.content) oneTimeAddOns += formData.pageCount * addOnPrices.content;
     if (formData.addOns.chatbot) oneTimeAddOns += addOnPrices.chatbot;
     
-    const planFee = formData.billing === 'annual' ? plan.annualFee : plan.monthlyFee;
-    const monthlyRecurring = formData.billing === 'monthly' ? planFee : 0;
-    const firstPayment = oneTimeAddOns + planFee;
+    const setupFee = plan.setupFee;
+    const monthlyFee = plan.monthlyFee;
+    const firstPayment = setupFee + oneTimeAddOns + monthlyFee;
     
     return {
+      setupFee,
       oneTimeAddOns,
       firstPayment,
-      monthlyRecurring,
+      monthlyRecurring: monthlyFee,
       today: firstPayment
     };
   };
@@ -189,8 +200,30 @@ const IntakePage = () => {
     }
   };
 
+  const handlePageCountChange = (value: number) => {
+    setFormData(prev => ({ ...prev, pageCount: isNaN(value) ? 0 : value }));
+    
+    // Validate page count immediately
+    const pageCountError = validatePageCount(value, formData.selectedPlan);
+    if (pageCountError) {
+      setErrors(prev => ({ ...prev, pageCount: pageCountError }));
+    } else {
+      setErrors(prev => ({ ...prev, pageCount: '' }));
+    }
+  };
+
   const handleRadioChange = (name: string, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // If changing plan, re-validate page count
+    if (name === 'selectedPlan') {
+      const pageCountError = validatePageCount(formData.pageCount, value);
+      if (pageCountError) {
+        setErrors(prev => ({ ...prev, pageCount: pageCountError }));
+      } else {
+        setErrors(prev => ({ ...prev, pageCount: '' }));
+      }
+    }
   };
 
   const handleCheckboxChange = (name: string, value: boolean) => {
@@ -208,6 +241,12 @@ const IntakePage = () => {
   };
 
   const handleSubmit = async () => {
+    // Validate before submission
+    if (!validateStep(formData.step)) {
+      toast.error("Please fix the errors before submitting.");
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -260,7 +299,7 @@ const IntakePage = () => {
           example_websites: formData.exampleWebsites,
           selected_plan: formData.selectedPlan,
           page_count: formData.pageCount,
-          billing: formData.billing,
+          billing: 'monthly', // Always monthly now
           add_ons: formData.addOns,
           uploaded_files: uploadedFiles,
           payment_status: 'pending'
@@ -318,7 +357,7 @@ const IntakePage = () => {
             selectedAddons: Object.entries(formData.addOns)
               .filter(([_, value]) => value)
               .map(([key, _]) => key),
-            billing: formData.billing
+            billing: 'monthly' // Always monthly now
           }
         }
       });
@@ -620,7 +659,7 @@ const IntakePage = () => {
               <p className="text-xl text-orange-200">Share images for your new website</p>
             </motion.div>
             
-            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
+            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
               <ImageUpload onFilesChange={handleLogoUpload} />
             </div>
           </div>
@@ -640,20 +679,6 @@ const IntakePage = () => {
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Choose Your Plan</h2>
               <p className="text-xl text-orange-200">Select the perfect plan for your business</p>
             </motion.div>
-            
-            {/* Billing Toggle */}
-            <div className="flex items-center justify-center space-x-6 p-6 bg-white/5 backdrop-blur-sm rounded-2xl mb-12 border border-white/10">
-              <span className={`text-lg font-semibold ${formData.billing === 'monthly' ? 'text-white' : 'text-white/60'}`}>Monthly</span>
-              <Switch
-                checked={formData.billing === 'annual'}
-                onCheckedChange={(checked) => handleRadioChange('billing', checked ? 'annual' : 'monthly')}
-                className="data-[state=checked]:bg-orange-500"
-              />
-              <span className={`text-lg font-semibold ${formData.billing === 'annual' ? 'text-white' : 'text-white/60'}`}>Annual</span>
-              {formData.billing === 'annual' && (
-                <Badge className="bg-green-500 text-white font-semibold">Save 10%</Badge>
-              )}
-            </div>
             
             {/* Plan Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -677,21 +702,21 @@ const IntakePage = () => {
                         formData.selectedPlan === key ? 'text-orange-300' : 'text-white'
                       }`}>{plan.name}</CardTitle>
                       <div className="space-y-2">
-                        <div className={`text-4xl font-bold ${
+                        <div className={`text-3xl font-bold ${
                           formData.selectedPlan === key ? 'text-orange-300' : 'text-orange-400'
                         }`}>
-                          ${formData.billing === 'monthly' ? plan.monthlyFee : plan.annualFee}
+                          ${plan.monthlyFee}/mo
                         </div>
-                        <div className={`font-medium ${
+                        <div className={`text-lg font-medium ${
                           formData.selectedPlan === key ? 'text-orange-200' : 'text-orange-200'
                         }`}>
-                          {formData.billing === 'monthly' ? '/month' : '/year'}
+                          + ${plan.setupFee} setup fee
                         </div>
-                        {formData.billing === 'annual' && (
-                          <div className="text-green-400 text-sm font-medium">
-                            Save ${(plan.monthlyFee * 12) - plan.annualFee}/year
-                          </div>
-                        )}
+                        <div className={`text-sm ${
+                          formData.selectedPlan === key ? 'text-orange-200' : 'text-orange-300'
+                        }`}>
+                          {plan.maxPages === Infinity ? 'Unlimited pages' : `Up to ${plan.maxPages} pages`}
+                        </div>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -735,12 +760,29 @@ const IntakePage = () => {
                 value={formData.pageCount}
                 onChange={(e) => {
                   const value = parseInt(e.target.value);
-                  setFormData(prev => ({ ...prev, pageCount: isNaN(value) ? 0 : value }));
+                  handlePageCountChange(value);
                 }}
-                className="bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder:text-white/60 text-lg py-4 focus:border-orange-400 focus:ring-orange-400/20"
+                className={`bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder:text-white/60 text-lg py-4 focus:border-orange-400 focus:ring-orange-400/20 ${
+                  errors.pageCount ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                }`}
                 min="1"
-                max="50"
+                max={plans[formData.selectedPlan].maxPages === Infinity ? "999" : plans[formData.selectedPlan].maxPages.toString()}
               />
+              {errors.pageCount && (
+                <motion.p 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-400 text-sm font-medium mt-2"
+                >
+                  {errors.pageCount}
+                </motion.p>
+              )}
+              <div className="text-sm text-orange-200 mt-2">
+                {plans[formData.selectedPlan].maxPages === Infinity 
+                  ? 'No page limit on Premium plan' 
+                  : `Maximum ${plans[formData.selectedPlan].maxPages} pages allowed for ${plans[formData.selectedPlan].name} plan`
+                }
+              </div>
             </div>
 
             {/* Add-ons */}
@@ -805,11 +847,6 @@ const IntakePage = () => {
                   </div>
                   
                   <div className="flex justify-between items-center py-3 border-b border-white/20">
-                    <span className="text-white/80 font-medium">Billing</span>
-                    <span className="text-white font-semibold capitalize">{formData.billing}</span>
-                  </div>
-
-                  <div className="flex justify-between items-center py-3 border-b border-white/20">
                     <span className="text-white/80 font-medium">Pages</span>
                     <span className="text-white font-semibold">{formData.pageCount}</span>
                   </div>
@@ -822,18 +859,14 @@ const IntakePage = () => {
                   )}
                   
                   <div className="flex justify-between items-center py-3 border-b border-white/20">
-                    <span className="text-white/80 font-medium">Plan Fee ({formData.billing})</span>
-                    <span className="text-white font-semibold">
-                      ${formData.billing === 'annual' ? plans[formData.selectedPlan].annualFee : plans[formData.selectedPlan].monthlyFee}
-                    </span>
+                    <span className="text-white/80 font-medium">Monthly Fee</span>
+                    <span className="text-white font-semibold">${pricing.monthlyRecurring}</span>
                   </div>
                   
-                  {formData.billing === 'monthly' && pricing.monthlyRecurring > 0 && (
-                    <div className="flex justify-between items-center py-3 border-b border-white/20">
-                      <span className="text-white/80 font-medium">Monthly Recurring</span>
-                      <span className="text-white font-semibold">${pricing.monthlyRecurring}</span>
-                    </div>
-                  )}
+                  <div className="flex justify-between items-center py-3 border-b border-white/20">
+                    <span className="text-white/80 font-medium">Setup Fee</span>
+                    <span className="text-white font-semibold">${pricing.setupFee}</span>
+                  </div>
                 </div>
                 
                 <div className="flex justify-between items-center py-6 bg-gradient-to-r from-orange-500/20 to-orange-600/20 rounded-xl px-6 border border-orange-500/30">
