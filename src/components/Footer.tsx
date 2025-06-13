@@ -69,7 +69,7 @@ const Footer = () => {
                 <Twitter className="w-5 h-5" />
               </a>
               <a
-                href="https://instagram.com/getseensites"
+                href="https://www.instagram.com/getseensitess/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/60 hover:text-orange-400 transition-colors"
