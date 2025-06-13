@@ -30,63 +30,62 @@ const ServicesSection = () => {
     {
       id: 'basic',
       name: 'Basic',
-      monthlyPrice: 25,
-      annualPrice: 270,
+      monthlyPrice: 49,
+      setupFee: 149,
       features: [
-      '3 Templates(Ground-level Customization)',
-      'Up to 3 pages',
-      'Mobile responsive',
-      'Basic SEO',
-      'SSL certificate',
-      'Domain Support'
-    ] 
+        'Mobile-optimized 3-page site',
+        'Hosted and secured',
+        'Live in 3-5 days',
+        '✅ Done-for-you launch, no tech headaches'
+      ],
+      description: 'For new businesses that need a clean, credible online presence.'
     },
     {
       id: 'starter',
       name: 'Starter',
-      monthlyPrice: 35,
-      annualPrice: 378,
+      monthlyPrice: 99,
+      setupFee: 249,
       features: [
-      'Basic Features +',
-      '10 Templates (Moderate customization)',
-      'Up to 5 pages',
-      'E-commerce(10 products)(3% Transaction Fee)',
-      'Stripe Integration (Payment Processing)',
-      'Booking/Signup Setup',
-      'Social media integration'
-    ] 
+        'All Basic features +',
+        '5-page high-converting layout',
+        'Booking setup (Calendly, Square, or custom)',
+        'Stripe payments integration (2% Transaction Fee)',
+        'Social media links + Instagram feed',
+        '✅ Looks professional. Works like a sales tool.'
+      ],
+      description: 'For service businesses ready to take bookings and payments.',
+      popular: true
     },
     {
       id: 'business',
       name: 'Business',
-      monthlyPrice: 69,
-      annualPrice: 745,
-      popular: true,
+      monthlyPrice: 199,
+      setupFee: 399,
       features: [
-      'Starter Features +',
-      'Advanced SEO',
-      'Up to 9 pages',
-      'E-commerce(unlimited products, Abandoned Cart Recovery, 1% Transaction Fee)',
-      'Increased support',
-      'Analytics dashboard',
-      'Custom integrations'
-    ] 
+        'All Starter features +',
+        'Full e-commerce store (unlimited products)',
+        'Lead capture + email marketing',
+        'Abandoned cart recovery',
+        'CRM + Analytics dashboard',
+        '✅ Real infrastructure for growth'
+      ],
+      description: 'For businesses that need to sell, automate, and track everything.'
     },
     {
       id: 'premium',
       name: 'Premium',
-      monthlyPrice: 159,
-      annualPrice: 1717,
+      monthlyPrice: 299,
+      setupFee: 999,
       features: [
-      'Business Features +',
-      'Custom website',
-      'Unlimited Pages',
-      'Priority Support(1-hour Support Repsonse Time (Within Working Hours))',
-      'Advanced SEO',
-      'Advanced Analytics',
-      'AI Product Recommendations',
-      '3 Team Accounts'
-        ]
+        'All Business features +',
+        'Custom design tailored to brand',
+        'Built-in AI chatbot',
+        'Advanced SEO + fast load times',
+        'Smart product recommendations, analytics',
+        'Priority support',
+        '✅ Your business, on autopilot.'
+      ],
+      description: 'For brands ready to dominate.'
     }
   ];
 
@@ -128,28 +127,18 @@ const ServicesSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Our <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Services</span>
+            Our <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Plans</span>
           </h2>
           <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto mb-8">
             Choose the perfect plan for your business needs and watch your online presence transform.
           </p>
           
-          {/* Monthly/Annual Toggle */}
-          <div className="flex items-center justify-center mb-8">
-            <span className={`text-lg ${!isAnnual ? 'text-white' : 'text-white/60'}`}>Monthly</span>
-            <button
-              onClick={() => setIsAnnual(!isAnnual)}
-              className="mx-4 relative inline-flex h-6 w-11 items-center rounded-full bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-orange-500 transition-transform ${
-                  isAnnual ? 'translate-x-6' : 'translate-x-1'
-                }`}
-              />
-            </button>
-            <span className={`text-lg ${isAnnual ? 'text-white' : 'text-white/60'}`}>
-              Annual <span className="text-green-400 text-sm">(Save 10%)</span>
-            </span>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto mb-8">
+            <div className="space-y-2 text-white/90">
+              <p>✅ No bloated agency fees</p>
+              <p>✅ No confusing platforms</p>
+              <p>✅ No templates that look like everyone else</p>
+            </div>
           </div>
         </motion.div>
 
@@ -176,19 +165,16 @@ const ServicesSection = () => {
               )}
 
               <div className="text-center mb-6">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">{plan.name}</h3>
+                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">{plan.name}</h3>
+                <p className="text-white/70 text-sm mb-4">{plan.description}</p>
                 <div className="space-y-2">
                   <div className="text-2xl sm:text-3xl font-bold text-orange-500">
-                    ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
-                    <span className="text-base sm:text-lg text-white/70">
-                      {isAnnual ? '/year' : '/month'}
-                    </span>
+                    ${plan.monthlyPrice}
+                    <span className="text-base sm:text-lg text-white/70">/month</span>
                   </div>
-                  {isAnnual && (
-                    <div className="text-sm text-green-400">
-                      Save ${(plan.monthlyPrice * 12) - plan.annualPrice}/year
-                    </div>
-                  )}
+                  <div className="text-lg text-white/80">
+                    + ${plan.setupFee} setup
+                  </div>
                 </div>
               </div>
 
@@ -209,7 +195,7 @@ const ServicesSection = () => {
                     : 'btn-primary'
                 }`}
               >
-                Add to Project
+                Choose Plan
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
@@ -221,19 +207,19 @@ const ServicesSection = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-center"
+          className="text-center bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-orange-500/20"
         >
           <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6">
-            Ready to <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Get Started?</span>
+            Ready to <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Get Seen—and Get Sales?</span>
           </h3>
           <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-8">
-            Let's discuss your project and create something amazing together.
+            We'll turn your ideas into a lead-generating, trust-building machine. Your business deserves to be found.
           </p>
           <button
             onClick={handleGetStarted}
             className="btn-primary text-lg px-8 py-4 group"
           >
-            Get Started Today
+            Start Your Site Now
             <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
           </button>
         </motion.div>
