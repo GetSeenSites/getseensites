@@ -1,15 +1,17 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const HeroSection = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { trackGetStarted, trackNavigation } = useAnalytics();
 
   const handleGetStarted = () => {
+    trackGetStarted('hero_cta');
     if (user) {
       navigate('/intake');
     } else {
@@ -18,6 +20,7 @@ const HeroSection = () => {
   };
 
   const handleSeeOurWork = () => {
+    trackNavigation('portfolio_from_hero');
     const workSection = document.getElementById('work');
     workSection?.scrollIntoView({ behavior: 'smooth' });
   };
