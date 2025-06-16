@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, Clock } from 'lucide-react';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const ContactSection = () => {
+  const { trackFormSubmit, trackEmailClick, trackSocialClick } = useAnalytics();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -11,6 +13,9 @@ const ContactSection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Track form submission
+    trackFormSubmit('contact_form');
     
     const subject = encodeURIComponent('Contact Form Submission - GetSeenSites');
     const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
@@ -29,6 +34,14 @@ const ContactSection = () => {
     });
   };
 
+  const handleEmailClick = () => {
+    trackEmailClick();
+  };
+
+  const handleSocialClick = (platform: string) => {
+    trackSocialClick(platform);
+  };
+
   const contactInfo = [
     {
       icon: Clock,
@@ -38,7 +51,8 @@ const ContactSection = () => {
     {
       icon: Mail,
       title: "Email",
-      details: ["contactgetseensites@gmail.com", "We reply within 24 hours"]
+      details: ["contactgetseensites@gmail.com", "We reply within 24 hours"],
+      clickable: true
     },
     {
       icon: MapPin,
@@ -48,10 +62,10 @@ const ContactSection = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, url: "https://www.facebook.com/profile.php?id=61577312487408&sk=grid", label: "Facebook" },
-    { icon: Twitter, url: "https://twitter.com/getseensites", label: "Twitter" },
-    { icon: Instagram, url: "https://www.instagram.com/getseensitess/", label: "Instagram" },
-    { icon: Linkedin, url: "https://linkedin.com/company/getseensites", label: "LinkedIn" }
+    { icon: Facebook, url: "https://www.facebook.com/profile.php?id=61577312487408&sk=grid", label: "Facebook", platform: "facebook" },
+    { icon: Twitter, url: "https://twitter.com/getseensites", label: "Twitter", platform: "twitter" },
+    { icon: Instagram, url: "https://www.instagram.com/getseensitess/", label: "Instagram", platform: "instagram" },
+    { icon: Linkedin, url: "https://linkedin.com/company/getseensites", label: "LinkedIn", platform: "linkedin" }
   ];
 
   return (
@@ -173,7 +187,19 @@ const ContactSection = () => {
                 <div>
                   <h4 className="text-xl font-semibold text-white mb-2">{item.title}</h4>
                   {item.details.map((detail, detailIndex) => (
-                    <p key={detailIndex} className="text-white/80">{detail}</p>
+                    <p key={detailIndex} className="text-white/80">
+                      {item.clickable && detailIndex === 0 ? (
+                        
+                          href={`mailto:${detail}`}
+                          onClick={handleEmailClick}
+                          className="hover:text-orange-300 transition-colors cursor-pointer"
+                        >
+                          {detail}
+                        </a>
+                      ) : (
+                        detail
+                      )}
+                    </p>
                   ))}
                 </div>
               </div>
@@ -184,11 +210,12 @@ const ContactSection = () => {
               <h4 className="text-xl font-semibold text-white mb-4">Follow us</h4>
               <div className="flex space-x-4">
                 {socialLinks.map((social, index) => (
-                  <a
+                  
                     key={index}
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => handleSocialClick(social.platform)}
                     className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/20 hover:bg-orange-500 hover:border-orange-500 transition-all duration-300 group"
                     aria-label={social.label}
                   >
