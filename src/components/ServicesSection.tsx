@@ -1,16 +1,18 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const ServicesSection = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { trackGetStarted, trackViewPricing } = useAnalytics();
   const [isAnnual, setIsAnnual] = useState(false);
 
   const handleGetStarted = () => {
+    trackGetStarted('services_main_cta');
     if (!user) {
       navigate('/auth');
       return;
@@ -18,13 +20,19 @@ const ServicesSection = () => {
     navigate('/intake');
   };
 
-  const handleAddToProject = () => {
+  const handleAddToProject = (planName: string) => {
+    trackGetStarted(planName.toLowerCase());
     if (!user) {
       navigate('/auth');
       return;
     }
     navigate('/intake');
   };
+
+  // Track when section comes into view
+  React.useEffect(() => {
+    trackViewPricing();
+  }, [trackViewPricing]);
 
   const plans = [
     {
@@ -36,7 +44,7 @@ const ServicesSection = () => {
         'Mobile-optimized 3-page site',
         'Hosted and secured',
         'Live in 3-5 days',
-        '✅ Done-for-you launch, no tech headaches'
+        ' Done-for-you launch, no tech headaches'
       ],
       description: 'For new businesses that need a clean, credible online presence.'
     },
@@ -51,7 +59,7 @@ const ServicesSection = () => {
         'Booking setup (Calendly, Square, or custom)',
         'Stripe payments integration (2% Transaction Fee)',
         'Social media links + Instagram feed',
-        '✅ Looks professional. Works like a sales tool.'
+        ' Looks professional. Works like a sales tool.'
       ],
       description: 'For service businesses ready to take bookings and payments.',
       popular: true
@@ -67,7 +75,7 @@ const ServicesSection = () => {
         'Lead capture + email marketing',
         'Abandoned cart recovery',
         'CRM + Analytics dashboard',
-        '✅ Real infrastructure for growth'
+        ' Real infrastructure for growth'
       ],
       description: 'For businesses that need to sell, automate, and track everything.'
     },
@@ -83,7 +91,7 @@ const ServicesSection = () => {
         'Advanced SEO + fast load times',
         'Smart product recommendations, analytics',
         'Priority support',
-        '✅ Your business, on autopilot.'
+        ' Your business, on autopilot.'
       ],
       description: 'For brands ready to dominate.'
     }
@@ -188,7 +196,7 @@ const ServicesSection = () => {
               </ul>
 
               <button
-                onClick={handleAddToProject}
+                onClick={() => handleAddToProject(plan.name)}
                 className={`w-full font-semibold py-3 px-4 rounded-xl transition-all text-sm group ${
                   plan.popular
                     ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-lg hover:shadow-orange-500/25'
