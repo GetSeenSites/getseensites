@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,21 +6,154 @@
     <title>GetSeenSites - Professional Web Development for Small Businesses</title>
     <meta name="description" content="Custom websites that convert visitors into customers. Professional web design for small businesses with conversion-optimized design and expert development." />
     <meta name="author" content="GetSeenSites" />
-
     <meta property="og:title" content="GetSeenSites - Professional Web Development for Small Businesses" />
     <meta property="og:description" content="Custom websites that convert visitors into customers. Professional web design for small businesses with conversion-optimized design and expert development." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://www.getseensites.com/Logo.png" />
-
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@GetSeenSites" />
     <meta name="twitter:image" content="https://www.getseensites.com/Logo.png" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  </head>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NTMKZJWZTL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NTMKZJWZTL');
 
+      // Enhanced Event Tracking Functions for GetSeenSites
+      window.trackEvent = function(action, category, label, value) {
+        gtag('event', action, {
+          event_category: category,
+          event_label: label,
+          value: value
+        });
+      };
+
+      // Specific tracking functions for GetSeenSites buttons
+      window.trackGetStarted = function(packageType) {
+        gtag('event', 'get_started_click', {
+          event_category: 'conversion',
+          event_label: packageType,
+          value: 1
+        });
+      };
+
+      window.trackContactUs = function(location) {
+        gtag('event', 'contact_us_click', {
+          event_category: 'lead_generation',
+          event_label: location,
+          value: 1
+        });
+      };
+
+      window.trackViewPricing = function() {
+        gtag('event', 'view_pricing', {
+          event_category: 'engagement',
+          event_label: 'pricing_section',
+          value: 1
+        });
+      };
+
+      window.trackPortfolioView = function(projectName) {
+        gtag('event', 'portfolio_view', {
+          event_category: 'engagement',
+          event_label: projectName,
+          value: 1
+        });
+      };
+
+      window.trackFormSubmit = function(formType) {
+        gtag('event', 'form_submit', {
+          event_category: 'conversion',
+          event_label: formType,
+          value: 5
+        });
+      };
+
+      window.trackPhoneClick = function() {
+        gtag('event', 'phone_click', {
+          event_category: 'lead_generation',
+          event_label: 'header_phone',
+          value: 3
+        });
+      };
+
+      window.trackEmailClick = function() {
+        gtag('event', 'email_click', {
+          event_category: 'lead_generation',
+          event_label: 'header_email',
+          value: 3
+        });
+      };
+
+      window.trackSocialClick = function(platform) {
+        gtag('event', 'social_click', {
+          event_category: 'engagement',
+          event_label: platform,
+          value: 1
+        });
+      };
+
+      window.trackNavigation = function(section) {
+        gtag('event', 'navigation_click', {
+          event_category: 'engagement',
+          event_label: section,
+          value: 1
+        });
+      };
+
+      window.trackScroll = function(percentage) {
+        gtag('event', 'scroll', {
+          event_category: 'engagement',
+          event_label: percentage + '_percent',
+          value: percentage
+        });
+      };
+
+      // Auto-track scroll depth
+      let scrollTracked = [];
+      window.addEventListener('scroll', function() {
+        const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        
+        [25, 50, 75, 90].forEach(function(threshold) {
+          if (scrollPercent >= threshold && !scrollTracked.includes(threshold)) {
+            scrollTracked.push(threshold);
+            window.trackScroll(threshold);
+          }
+        });
+      });
+
+      // Auto-track time on page milestones
+      setTimeout(function() {
+        gtag('event', 'time_on_page', {
+          event_category: 'engagement',
+          event_label: '30_seconds',
+          value: 30
+        });
+      }, 30000);
+
+      setTimeout(function() {
+        gtag('event', 'time_on_page', {
+          event_category: 'engagement',
+          event_label: '60_seconds',
+          value: 60
+        });
+      }, 60000);
+
+      setTimeout(function() {
+        gtag('event', 'time_on_page', {
+          event_category: 'engagement',
+          event_label: '2_minutes',
+          value: 120
+        });
+      }, 120000);
+    </script>
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
