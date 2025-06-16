@@ -51,8 +51,7 @@ const ContactSection = () => {
     {
       icon: Mail,
       title: "Email",
-      details: ["contactgetseensites@gmail.com", "We reply within 24 hours"],
-      clickable: true
+      details: ["contactgetseensites@gmail.com", "We reply within 24 hours"]
     },
     {
       icon: MapPin,
@@ -188,7 +187,7 @@ const ContactSection = () => {
                   <h4 className="text-xl font-semibold text-white mb-2">{item.title}</h4>
                   {item.details.map((detail, detailIndex) => (
                     <p key={detailIndex} className="text-white/80">
-                      {item.clickable && detailIndex === 0 ? (
+                      {item.title === "Email" && detailIndex === 0 ? (
                         
                           href={`mailto:${detail}`}
                           onClick={handleEmailClick}
