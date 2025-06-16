@@ -10,6 +10,7 @@ declare global {
     trackSocialClick: (platform: string) => void;
     trackFormSubmit: (formType: string) => void;
     trackPortfolioView: (projectName: string) => void;
+    trackViewPricing: () => void;
   }
 }
 
@@ -62,6 +63,12 @@ export const useAnalytics = () => {
     }
   }, []);
 
+  const trackViewPricing = useCallback(() => {
+    if (typeof window !== 'undefined' && window.trackViewPricing) {
+      window.trackViewPricing();
+    }
+  }, []);
+
   return {
     trackGetStarted,
     trackContactUs,
@@ -71,5 +78,6 @@ export const useAnalytics = () => {
     trackSocialClick,
     trackFormSubmit,
     trackPortfolioView,
+    trackViewPricing,
   };
 };
