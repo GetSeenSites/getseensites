@@ -185,25 +185,21 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="text-xl font-semibold text-white mb-2">{item.title}</h4>
-                  {item.details.map((detail, detailIndex) => {
-                    if (item.title === "Email" && detailIndex === 0) {
-                      return (
+                  {item.details.map((detail, detailIndex) => (
+                    <p key={detailIndex} className="text-white/80">
+                      {item.title === "Email" && detailIndex === 0 ? (
                         
-                          key={detailIndex}
                           href="mailto:contactgetseensites@gmail.com"
                           onClick={handleEmailClick}
-                          className="block text-white/80 hover:text-orange-300 transition-colors cursor-pointer"
+                          className="hover:text-orange-300 transition-colors cursor-pointer"
                         >
                           {detail}
                         </a>
-                      );
-                    }
-                    return (
-                      <p key={detailIndex} className="text-white/80">
-                        {detail}
-                      </p>
-                    );
-                  })}
+                      ) : (
+                        detail
+                      )}
+                    </p>
+                  ))}
                 </div>
               </div>
             ))}
