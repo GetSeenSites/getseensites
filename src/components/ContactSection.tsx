@@ -188,7 +188,7 @@ const ContactSection = () => {
                   {item.details.map((detail, detailIndex) => (
                     <p key={detailIndex} className="text-white/80">
                       {item.title === "Email" && detailIndex === 0 ? (
-                        
+                        <a
                           href="mailto:contactgetseensites@gmail.com"
                           onClick={handleEmailClick}
                           className="hover:text-orange-300 transition-colors cursor-pointer"
@@ -209,7 +209,7 @@ const ContactSection = () => {
               <h4 className="text-xl font-semibold text-white mb-4">Follow us</h4>
               <div className="flex space-x-4">
                 {socialLinks.map((social, index) => (
-                  
+                  <a
                     key={index}
                     href={social.url}
                     target="_blank"
