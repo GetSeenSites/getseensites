@@ -25,6 +25,12 @@ const HeroSection = () => {
     workSection?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleNavigateToServices = () => {
+    trackNavigation('services_from_hero');
+    const servicesSection = document.getElementById('services');
+    servicesSection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section className="min-h-screen bg-hero-gradient relative overflow-hidden">
       {/* Background Effects */}
@@ -109,7 +115,14 @@ const HeroSection = () => {
               >
                 <div>
                   <h3 className="text-2xl font-bold text-white mb-4">We Don't Just Build Websites. We Build Growth Machines.</h3>
-                  <p className="text-white/80 mb-4">At GetSeenSites, we create websites that convert strangers into customers. Not just "look pretty"—but perform. From design to launch to automation, it's all done for you.</p>
+                  <p className="text-white/80 mb-4">At GetSeenSites, we create{' '}
+                    <button 
+                      onClick={handleNavigateToServices}
+                      className="text-orange-300 hover:text-orange-200 underline transition-colors"
+                    >
+                      professional web development
+                    </button>{' '}
+                    solutions that convert strangers into customers. Not just "look pretty"—but perform. From design to launch to automation, it's all done for you.</p>
                 </div>
 
                 <div className="space-y-3">
