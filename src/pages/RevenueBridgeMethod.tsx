@@ -344,7 +344,7 @@ const RevenueBridgeMethod = () => {
                 <div className="bg-gradient-to-r from-green-900/20 to-blue-900/20 border border-green-500/30 rounded-2xl p-6">
                   <h4 className="text-xl font-semibold text-green-400 mb-4">What This Data Means:</h4>
                   <ul className="space-y-2 text-white/80">
-                    <li>• <strong>Consistent Growth Pattern:</strong> Traffic increased steadily throughout the 7-day period</li>
+                    <li>• <strong>Consistent Growth Pattern:</strong> Traffic increased steadily throughout the 3-day period</li>
                     <li>• <strong>Quality Engagement:</strong> Not just more visitors, but more engaged users</li>
                     <li>• <strong>Sustainable Results:</strong> Growth maintained beyond the initial implementation</li>
                     <li>• <strong>Measurable ROI:</strong> Clear before/after comparison shows real business impact</li>
@@ -580,7 +580,7 @@ const RevenueBridgeMethod = () => {
                   </div>
 
                   <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-orange-500/20">
-                    <h3 className="text-2xl font-bold text-orange-300 mb-4">Phase 2: Content Bridge (Days 3-5)</h3>
+                    <h3 className="text-2xl font-bold text-orange-300 mb-4">Phase 2: Content Bridge (Days 2-3)</h3>
                     <ol className="list-decimal list-inside space-y-2 text-white/80">
                       <li>Research target customer search behavior</li>
                       <li>Create content targeting medium-tail keywords</li>
@@ -591,7 +591,7 @@ const RevenueBridgeMethod = () => {
                   </div>
 
                   <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-orange-500/20">
-                    <h3 className="text-2xl font-bold text-orange-300 mb-4">Phase 3: Authority Amplifier (Days 6-7)</h3>
+                    <h3 className="text-2xl font-bold text-orange-300 mb-4">Phase 3: Authority Amplifier (Day 3)</h3>
                     <ol className="list-decimal list-inside space-y-2 text-white/80">
                       <li>Document methodology and results</li>
                       <li>Create shareable case study content</li>
@@ -616,7 +616,7 @@ const RevenueBridgeMethod = () => {
 
                 {/* Complete Visual Timeline */}
                 <div className="mb-12">
-                  <h3 className="text-2xl font-bold text-white mb-6 text-center">Complete Visual Timeline: 7-Day Transformation</h3>
+                  <h3 className="text-2xl font-bold text-white mb-6 text-center">Complete Visual Timeline: 3-Day Transformation</h3>
                   <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -689,7 +689,7 @@ const RevenueBridgeMethod = () => {
                 </div>
 
                 <div className="bg-gradient-to-r from-green-900/20 to-blue-900/20 border border-green-500/30 rounded-2xl p-8 mb-8">
-                  <h3 className="text-2xl font-bold text-white mb-6">7-Day Performance Summary:</h3>
+                  <h3 className="text-2xl font-bold text-white mb-6">3-Day Performance Summary:</h3>
                   <ul className="space-y-2 text-white/80">
                     <li>• <strong>Traffic Growth:</strong> 4 to 10 daily active users (150% increase)</li>
                     <li>• <strong>Engagement Improvement:</strong> 300% increase in total events</li>
