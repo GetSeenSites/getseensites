@@ -61,8 +61,9 @@ const RevenueBridgeMethod = () => {
     navigateWithScrollToTop(path);
   };
 
-  const shareOnLinkedIn = () => {
+ const shareOnLinkedIn = () => {
   const url = encodeURIComponent(`${window.location.origin}/revenue-bridge-method`);
+  // LinkedIn only uses the url parameter now
   window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
 };
 
