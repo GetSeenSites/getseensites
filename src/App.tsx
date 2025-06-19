@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import IntakePage from "./pages/IntakePage";
 import WebsitesPage from "./pages/WebsitesPage";
 import AuthPage from "./pages/AuthPage";
+import RevenueBridgeMethod from "./pages/RevenueBridgeMethod";
 import NotFound from "./pages/NotFound";
 import CosmicSidebar from "./components/CosmicSidebar";
 import MobileNavbar from "./components/MobileNavbar";
@@ -40,6 +41,7 @@ const App = () => (
                 <Route path="/intake" element={<IntakePage />} />
                 <Route path="/websites" element={<WebsitesPage />} />
                 <Route path="/auth" element={<AuthPage />} />
+                <Route path="/revenue-bridge-method" element={<RevenueBridgeMethod />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
