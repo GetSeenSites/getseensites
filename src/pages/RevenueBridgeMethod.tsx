@@ -206,7 +206,7 @@ const RevenueBridgeMethod = () => {
                   </div>
                   <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-orange-500/20">
                     <Target className="w-8 h-8 text-orange-400 mx-auto mb-3" />
-                    <div className="text-3xl font-bold text-white">7</div>
+                    <div className="text-3xl font-bold text-white">3</div>
                     <div className="text-white/80">Days to Results</div>
                   </div>
                 </div>
