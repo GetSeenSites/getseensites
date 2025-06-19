@@ -62,11 +62,9 @@ const RevenueBridgeMethod = () => {
   };
 
   const shareOnLinkedIn = () => {
-    const url = encodeURIComponent(`${window.location.origin}/revenue-bridge-method`);
-    const title = encodeURIComponent('How The Revenue Bridge Method Increased Website Traffic by 150% in 3 Days');
-    const summary = encodeURIComponent('A real case study showing how GetSeenSites applied the Revenue Bridge Method to grow traffic fast. Learn the 3-step system.');
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}&summary=${summary}`, '_blank');
-  };
+  const url = encodeURIComponent(`${window.location.origin}/revenue-bridge-method`);
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+};
 
   const shareOnTwitter = () => {
     const url = encodeURIComponent(`${window.location.origin}/revenue-bridge-method`);
