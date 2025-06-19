@@ -108,7 +108,8 @@ const ContactSection = () => {
             Get In <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Touch</span>
           </h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Ready to transform your business? Let's discuss your project and bring your vision to life.
+            Ready to transform your business? Let's discuss your project and bring your vision to life. 
+            Our proven process delivers results in just 5 days.
           </p>
         </motion.div>
 
