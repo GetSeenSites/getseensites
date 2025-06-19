@@ -29,6 +29,15 @@ const ServicesSection = () => {
     navigate('/intake');
   };
 
+  const handleLearnMore = (section: string) => {
+    if (section === 'portfolio') {
+      const workSection = document.getElementById('work');
+      workSection?.scrollIntoView({ behavior: 'smooth' });
+    } else if (section === 'revenue-bridge') {
+      navigate('/revenue-bridge-method');
+    }
+  };
+
   // Track when section comes into view
   React.useEffect(() => {
     trackViewPricing();
@@ -138,7 +147,23 @@ const ServicesSection = () => {
             Our <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Plans</span>
           </h2>
           <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto mb-8">
-            Choose the perfect plan for your business needs and watch your online presence transform.
+            Choose the perfect plan for your business needs and watch your online presence transform. From{' '}
+            <button 
+              onClick={() => handleLearnMore('portfolio')}
+              className="text-orange-300 hover:text-orange-200 underline transition-colors"
+            >
+              custom website design
+            </button>{' '}
+            to{' '}
+            <span className="text-orange-300">mobile-responsive development</span>, we deliver{' '}
+            <button 
+              onClick={() => handleLearnMore('portfolio')}
+              className="text-orange-300 hover:text-orange-200 underline transition-colors"
+            >
+              professional results
+            </button>{' '}
+            with{' '}
+            <span className="text-orange-300">fast delivery</span>.
           </p>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto mb-8">
@@ -146,7 +171,22 @@ const ServicesSection = () => {
               <p>✅ No bloated agency fees</p>
               <p>✅ No confusing platforms</p>
               <p>✅ No templates that look like everyone else</p>
+              <p>✅ Includes{' '}
+                <span className="text-orange-300">SEO optimization</span> for better visibility
+              </p>
             </div>
+          </div>
+
+          <div className="text-center mb-8">
+            <p className="text-white/80 mb-4">
+              Want to see how we achieved 150% traffic growth? Check out our{' '}
+              <button 
+                onClick={() => handleLearnMore('revenue-bridge')}
+                className="text-orange-300 hover:text-orange-200 underline transition-colors font-semibold"
+              >
+                Revenue Bridge Method case study
+              </button>
+            </p>
           </div>
         </motion.div>
 
@@ -221,7 +261,14 @@ const ServicesSection = () => {
             Ready to <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Get Seen—and Get Sales?</span>
           </h3>
           <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-8">
-            We'll turn your ideas into a lead-generating, trust-building machine. Your business deserves to be found.
+            We'll turn your ideas into a lead-generating, trust-building machine. Your business deserves to be found. See{' '}
+            <button 
+              onClick={() => handleLearnMore('revenue-bridge')}
+              className="text-orange-300 hover:text-orange-200 underline transition-colors"
+            >
+              our development process
+            </button>{' '}
+            in action.
           </p>
           <button
             onClick={handleGetStarted}
