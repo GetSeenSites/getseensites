@@ -1,8 +1,21 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string) => {
+    if (path.startsWith('#')) {
+      const element = document.getElementById(path.substring(1));
+      element?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate(path);
+    }
+  };
+
   return (
     <footer className="bg-gradient-to-br from-black via-orange-900 to-orange-500 text-white relative overflow-hidden">
       {/* Background Effects */}
@@ -33,9 +46,9 @@ const Footer = () => {
       ))}
       
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8 mb-12">
+        <div className="grid lg:grid-cols-5 md:grid-cols-2 gap-8 mb-12">
           {/* Company Info */}
-          <div className="space-y-6">
+          <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center space-x-3">
               <img 
                 src="/Logo.png" 
@@ -47,7 +60,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-white/80 leading-relaxed">
-              Professional websites for small businesses. We help you get seen, get leads, and grow your business online.
+              Professional websites for small businesses. We help you get seen, get leads, and grow your business online. Start Now!
             </p>
             <div className="flex space-x-4">
               <a
@@ -94,54 +107,138 @@ const Footer = () => {
             <h4 className="text-lg font-semibold">Services</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#services" className="text-white/80 hover:text-orange-400 transition-colors">Website Design</a>
+                <button 
+                  onClick={() => handleNavigation('#services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Website Design
+                </button>
               </li>
               <li>
-                <a href="#services" className="text-white/80 hover:text-orange-400 transition-colors">SEO Optimization</a>
+                <button 
+                  onClick={() => handleNavigation('#services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  E-commerce Development
+                </button>
               </li>
               <li>
-                <a href="#services" className="text-white/80 hover:text-orange-400 transition-colors">E-commerce Solutions</a>
+                <button 
+                  onClick={() => handleNavigation('#services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  SEO Services
+                </button>
               </li>
               <li>
-                <a href="#services" className="text-white/80 hover:text-orange-400 transition-colors">Content Creation</a>
+                <button 
+                  onClick={() => handleNavigation('#services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Website Maintenance
+                </button>
               </li>
             </ul>
           </div>
 
-          {/* Quick Links */}
+          {/* Resources */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Quick Links</h4>
+            <h4 className="text-lg font-semibold">Resources</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-white/80 hover:text-orange-400 transition-colors">About Us</a>
+                <button 
+                  onClick={() => handleNavigation('/revenue-bridge-method')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Our Process
+                </button>
               </li>
               <li>
-                <a href="#work" className="text-white/80 hover:text-orange-400 transition-colors">Portfolio</a>
+                <button 
+                  onClick={() => handleNavigation('#work')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Portfolio
+                </button>
               </li>
               <li>
-                <a href="#contact" className="text-white/80 hover:text-orange-400 transition-colors">Contact</a>
+                <button 
+                  onClick={() => handleNavigation('/revenue-bridge-method')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Revenue Bridge Method
+                </button>
               </li>
               <li>
-                <a href="#" className="text-white/80 hover:text-orange-400 transition-colors">Blog</a>
+                <button 
+                  onClick={() => handleNavigation('#contact')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Free Website Audit
+                </button>
               </li>
             </ul>
           </div>
 
-          {/* Subscribe */}
+          {/* Local */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Subscribe</h4>
-            <p className="text-white/80">
-              Stay up to date with our latest news and offers.
-            </p>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Your Email"
-                className="bg-white/10 border border-white/20 rounded-l-md py-2 px-4 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent backdrop-blur-sm"
-              />
-              <button className="bg-orange-500 hover:bg-orange-600 text-white rounded-r-md px-4 py-2 transition-colors">
-                Subscribe
-              </button>
+            <h4 className="text-lg font-semibold">Local</h4>
+            <ul className="space-y-2">
+              <li>
+                <button 
+                  onClick={() => handleNavigation('#services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Delaware Web Design
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('#services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Bear Area Services
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/revenue-bridge-method')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Small Business Resources
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Newsletter Section */}
+        <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-orange-500/20 mb-12">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h4 className="text-2xl font-bold text-white mb-4">Stay Updated</h4>
+              <p className="text-white/80 mb-4">
+                Get the latest tips on website optimization, small business growth, and our{' '}
+                <button 
+                  onClick={() => handleNavigation('/revenue-bridge-method')}
+                  className="text-orange-300 hover:text-orange-200 underline transition-colors"
+                >
+                  Revenue Bridge Method
+                </button>{' '}
+                insights delivered to your inbox.
+              </p>
+            </div>
+            <div>
+              <div className="flex">
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className="bg-white/10 border border-white/20 rounded-l-md py-3 px-4 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent backdrop-blur-sm flex-1"
+                />
+                <button className="bg-orange-500 hover:bg-orange-600 text-white rounded-r-md px-6 py-3 transition-colors font-semibold">
+                  Subscribe
+                </button>
+              </div>
             </div>
           </div>
         </div>
