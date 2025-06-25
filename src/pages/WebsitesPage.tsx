@@ -24,7 +24,7 @@ const WebsitesPage = () => {
       title: "COFooty",
       description: "Soccer Personal Trainer",
       tags: ["Train", "Booking", "Sports"],
-      url: "www.cofooty.om",
+      url: "https://www.cofooty.com",
       image: "Screenshot (367).png"
     },
    {
