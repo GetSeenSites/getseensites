@@ -9,18 +9,18 @@ const PortfolioSection = () => {
 
   const portfolioItems = [
     {
+      title: "COFooty",
+      description: "Soccer Personal Trainer",
+      tags: ["Train", "Booking", "Sports"],
+      url: "www.cofooty.com",
+      image: "Screenshot (367).png"
+    },
+    {
       title: "RUDEBOYBLENDZ",
       description: "A bold, yet modern booking site for a solo barber.",
       tags: ["eCommerce", "Booking", "Haircare"],
       url: "https://rudeboyblendz.com",
       image: "Web_barber.png"
-    },
-    {
-      title: "COFooty",
-      description: "Soccer Personal Trainer",
-      tags: ["Train", "Booking", "Sports"],
-      url: "",
-      image: "Web_train.png"
     },
     {
       title: "SkylineBuild ",
