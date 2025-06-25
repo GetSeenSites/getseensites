@@ -20,19 +20,19 @@ const WebsitesPage = () => {
   };
 
   const portfolioItems = [
+     {
+      title: "COFooty",
+      description: "Soccer Personal Trainer",
+      tags: ["Train", "Booking", "Sports"],
+      url: "www.cofooty.om",
+      image: "Screenshot (367).png"
+    },
    {
       title: "RUDEBOYBLENDZ",
       description: "A bold, yet modern booking site for a solo barber.",
       tags: ["eCommerce", "Booking", "Haircare"],
       url: "https://rudeboyblendz.com",
       image: "Web_barber.png"
-    },
-    {
-      title: "COFooty",
-      description: "Soccer Personal Trainer",
-      tags: ["Train", "Booking", "Sports"],
-      url: "",
-      image: "Web_train.png"
     },
     {
       title: "SkylineBuild ",
@@ -80,10 +80,10 @@ const WebsitesPage = () => {
 
   const logoItems = [
     {
-      title: "CodRod",
-      description: "Bold, modern logo matches aquatic theme.",
-      image: "Fish_logo.png",
-      tags: ["Tech", "Corporate", "Modern"]
+      title: "COFooty",
+      description: "Bold, modern logo matches black and yellow theme.",
+      image: "COFooty_Logo.png",
+      tags: ["Sports", "Trainer", "Personal"]
     },
     {
       title: "Vintage Wears",
