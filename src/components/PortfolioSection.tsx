@@ -12,7 +12,7 @@ const PortfolioSection = () => {
       title: "COFooty",
       description: "Soccer Personal Trainer",
       tags: ["Train", "Booking", "Sports"],
-      url: "www.cofooty.com",
+      url: "https://www.cofooty.com",
       image: "Screenshot (367).png"
     },
     {
