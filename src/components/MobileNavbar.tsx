@@ -1,15 +1,13 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Home, Globe, Briefcase, Phone, User, LogOut, LogIn } from 'lucide-react';
+import { Menu, X, Home, Globe, Briefcase, Phone, FileText } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
 
 const MobileNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signOut } = useAuth();
 
   const handleNavigation = (path: string) => {
     setIsOpen(false);
@@ -52,23 +50,17 @@ const MobileNavbar = () => {
         const contactSection = document.getElementById('contact');
         contactSection?.scrollIntoView({ behavior: 'smooth' });
       }
-    } else if (path === '/dashboard' && !user) {
-      navigate('/auth');
     } else {
       navigate(path);
     }
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-    setIsOpen(false);
-  };
 
   const navItems = [
     { icon: Home, label: 'Home', path: '/' },
-    { icon: Briefcase, label: 'Services', path: '/#services' },
-    { icon: Globe, label: 'Websites', path: '/#work' },
+    { icon: Briefcase, label: 'Services', path: '/services' },
+    { icon: Globe, label: 'Websites', path: '/websites' },
+    { icon: FileText, label: 'Resources', path: '/resources-page' },
     { icon: Phone, label: 'Contact', path: '/#contact' },
   ];
 
@@ -119,6 +111,7 @@ const MobileNavbar = () => {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.2 + index * 0.1 }}
                     onClick={() => handleNavigation(item.path)}
+                    data-testid={item.path === '/resources-page' ? 'nav-resources' : undefined}
                     className="w-full flex items-center space-x-4 p-4 text-white hover:bg-white/10 rounded-xl transition-colors"
                   >
                     <item.icon className="w-5 h-5" />
@@ -126,29 +119,6 @@ const MobileNavbar = () => {
                   </motion.button>
                 ))}
                 
-                {/* Profile/Dashboard */}
-                <motion.button
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.6 }}
-                  onClick={() => handleNavigation(user ? '/dashboard' : '/auth')}
-                  className="w-full flex items-center space-x-4 p-4 text-white hover:bg-white/10 rounded-xl transition-colors"
-                >
-                  <User className="w-5 h-5" />
-                  <span className="text-lg font-medium">{user ? 'Dashboard' : 'Profile'}</span>
-                </motion.button>
-
-                {/* Auth Section */}
-                <motion.button
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.7 }}
-                  onClick={user ? handleSignOut : () => handleNavigation('/auth')}
-                  className="w-full flex items-center space-x-4 p-4 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-colors border-t border-orange-500/20 mt-6 pt-6"
-                >
-                  {user ? <LogOut className="w-5 h-5" /> : <LogIn className="w-5 h-5" />}
-                  <span className="text-lg font-medium">{user ? 'Sign Out' : 'Sign In'}</span>
-                </motion.button>
               </nav>
             </motion.div>
           </motion.div>
