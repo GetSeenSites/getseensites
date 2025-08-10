@@ -1,138 +1,232 @@
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const FAQ = () => {
-  const [openItems, setOpenItems] = useState<number[]>([]);
+const Footer = () => {
   const navigate = useNavigate();
 
-  const toggleItem = (index: number) => {
-    setOpenItems(prev => 
-      prev.includes(index) 
-        ? prev.filter(i => i !== index)
-        : [...prev, index]
-    );
-  };
-
-  const handleGetQuote = () => {
-    navigate('/intake');
-  };
-
-  const faqItems = [
-    {
-      question: "What's included in the setup fee?",
-      answer: "Your setup fee covers everything needed to get your website live: layout design, content integration, branding/styling, SEO setup, form configuration, and mobile responsiveness. You'll walk away with a custom-built site tailored to your business goals."
-    },
-    {
-      question: "What does the monthly fee cover?",
-      answer: "The monthly fee includes hosting, domain management, security updates, content backups, and priority support. You also get minor updates or tweaks each month depending on your plan — so your site stays fresh and functional without extra charges."
-    },
-    {
-      question: "Is there a contract or can I cancel anytime?",
-      answer: "You're never locked in. Our plans are month-to-month, and you can cancel anytime. If you do, we'll help you export your site or transfer ownership."
-    },
-    {
-      question: "What if I want more pages or features than my plan includes?",
-      answer: "No problem — you can always upgrade to the next tier or request add-ons à la carte (like extra pages, SEO audits, or integrations). Just reach out and we'll customize a solution for you."
-    },
-    {
-      question: "Do I need to buy a domain separately?",
-      answer: "Nope! We'll handle domain registration and connection for you. Already own one? We'll connect it to your new website free of charge."
-    },
-    {
-      question: "Can I get a custom quote instead of choosing a plan?",
-      answer: "Yes! If your project doesn't fit cleanly into one of the listed packages, just click \"Get a Custom Quote\" or book a free discovery call. We'll build a package just for you."
+  const handleNavigation = (path: string) => {
+    if (path.startsWith('#')) {
+      const element = document.getElementById(path.substring(1));
+      element?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate(path);
     }
-  ];
+  };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-black via-orange-900 to-orange-500 relative overflow-hidden">
+    <footer className="bg-gradient-to-br from-black via-orange-900 to-orange-500 text-white relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 right-10 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-10 right-20 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-10 left-20 w-80 h-80 bg-white/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 relative z-10">
-        {/* Header */}
+      {/* Animated Stars */}
+      {[...Array(20)].map((_, i) => (
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6">
-            Frequently Asked <span className="text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">Questions</span>
-          </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Got questions? We've got answers. Here's everything you need to know about our services.
-          </p>
-        </motion.div>
-
-        {/* FAQ Items */}
-        <div className="space-y-4 mb-12">
-          {faqItems.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 overflow-hidden"
-            >
-              <button
-                onClick={() => toggleItem(index)}
-                className="w-full p-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
+          key={i}
+          className="absolute w-1 h-1 bg-white/30 rounded-full"
+          animate={{
+            scale: [0, 1, 0],
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 2,
+            repeat: Infinity,
+            delay: Math.random() * 2,
+          }}
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+        />
+      ))}
+      
+      <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
+        <div className="grid lg:grid-cols-5 md:grid-cols-2 gap-8 mb-12">
+          {/* Company Info */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/Logo.png" 
+                alt="GetSeenSites Logo" 
+                className="h-8 w-auto"
+              />
+              <span className="text-2xl font-bold text-transparent bg-gradient-to-r from-orange-300 to-white bg-clip-text">
+                GetSeenSites
+              </span>
+            </div>
+            <p className="text-white/80 leading-relaxed">
+              Professional websites for small businesses. We help you get seen, get leads, and grow your business online. Start Now!
+            </p>
+            <div className="flex space-x-4">
+              <a
+                href="https://www.facebook.com/profile.php?id=61577312487408&sk=grid"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-orange-400 transition-colors"
+                aria-label="Facebook"
               >
-                <span className="text-lg font-semibold text-white">❓ {item.question}</span>
-                <ChevronDown 
-                  className={`w-6 h-6 text-orange-400 transition-transform duration-300 ${
-                    openItems.includes(index) ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-              <AnimatePresence>
-                {openItems.includes(index) && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-6 pb-6">
-                      <p className="text-white/80 leading-relaxed">
-                        {item.answer}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a
+                href="https://twitter.com/getseensites"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-orange-400 transition-colors"
+                aria-label="Twitter"
+              >
+                <Twitter className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.instagram.com/getseensitess/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-orange-400 transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://linkedin.com/company/getseensites"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/60 hover:text-orange-400 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Services */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold">Services</h4>
+            <ul className="space-y-2">
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Website Design
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  E-commerce Development
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  SEO Services
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Website Maintenance
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold">Resources</h4>
+            <ul className="space-y-2">
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/revenue-bridge-method')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Our Process
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/websites')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Portfolio
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/revenue-bridge-method')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Revenue Bridge Method
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('#contact')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Free Website Audit
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Local */}
+          <div className="space-y-4">
+            <h4 className="text-lg font-semibold">Local</h4>
+            <ul className="space-y-2">
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Delaware Web Design
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/services')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Bear Area Services
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => handleNavigation('/revenue-bridge-method')}
+                  className="text-white/80 hover:text-orange-400 transition-colors text-left"
+                >
+                  Small Business Resources
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        {/* Get Quote CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center"
-        >
-          <p className="text-white/80 mb-6 text-lg">
-            Still have questions or need a custom solution?
+
+        {/* Bottom Bar */}
+        <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <p className="text-white/60 text-sm">
+            © 2025 GetSeenSites. All rights reserved.
           </p>
-          <button
-            onClick={handleGetQuote}
-            className="btn-primary text-lg px-8 py-4"
-          >
-            Get a Quote
-          </button>
-        </motion.div>
+          <div className="flex space-x-6 text-sm text-white/60">
+            <a href="#" className="hover:text-orange-400 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-orange-400 transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-orange-400 transition-colors">Cookie Policy</a>
+          </div>
+        </div>
       </div>
-    </section>
+    </footer>
   );
 };
 
-export default FAQ;
+export default Footer;
