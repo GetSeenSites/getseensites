@@ -17,12 +17,7 @@ const FAQ = () => {
   };
 
   const handleGetQuote = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate('/#contact');
-    }
+    navigate('/intake');
   };
 
   const faqItems = [
