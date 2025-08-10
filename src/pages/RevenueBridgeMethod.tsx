@@ -49,7 +49,12 @@ const RevenueBridgeMethod = () => {
   }, []);
 
   const handleScheduleAudit = () => {
-    window.location.href = '/#contact';
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.location.href = '/#contact';
+    }
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -61,11 +66,12 @@ const RevenueBridgeMethod = () => {
     navigateWithScrollToTop(path);
   };
 
- const shareOnLinkedIn = () => {
-  const url = encodeURIComponent(`${window.location.origin}/revenue-bridge-method`);
-  // LinkedIn only uses the url parameter now
-  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
-};
+  const shareOnLinkedIn = () => {
+    const url = encodeURIComponent(`${window.location.origin}/revenue-bridge-method`);
+    const title = encodeURIComponent('How The Revenue Bridge Method Increased Website Traffic by 150% in 3 Days');
+    const summary = encodeURIComponent('A real case study showing how GetSeenSites applied the Revenue Bridge Method to grow traffic fast. Learn the 3-step system.');
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}&summary=${summary}`, '_blank');
+  };
 
   const shareOnTwitter = () => {
     const url = encodeURIComponent(`${window.location.origin}/revenue-bridge-method`);
@@ -205,7 +211,7 @@ const RevenueBridgeMethod = () => {
                   </div>
                   <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-orange-500/20">
                     <Target className="w-8 h-8 text-orange-400 mx-auto mb-3" />
-                    <div className="text-3xl font-bold text-white">3</div>
+                    <div className="text-3xl font-bold text-white">7</div>
                     <div className="text-white/80">Days to Results</div>
                   </div>
                 </div>
@@ -344,7 +350,7 @@ const RevenueBridgeMethod = () => {
                 <div className="bg-gradient-to-r from-green-900/20 to-blue-900/20 border border-green-500/30 rounded-2xl p-6">
                   <h4 className="text-xl font-semibold text-green-400 mb-4">What This Data Means:</h4>
                   <ul className="space-y-2 text-white/80">
-                    <li>• <strong>Consistent Growth Pattern:</strong> Traffic increased steadily throughout the 3-day period</li>
+                    <li>• <strong>Consistent Growth Pattern:</strong> Traffic increased steadily throughout the 7-day period</li>
                     <li>• <strong>Quality Engagement:</strong> Not just more visitors, but more engaged users</li>
                     <li>• <strong>Sustainable Results:</strong> Growth maintained beyond the initial implementation</li>
                     <li>• <strong>Measurable ROI:</strong> Clear before/after comparison shows real business impact</li>
@@ -580,7 +586,7 @@ const RevenueBridgeMethod = () => {
                   </div>
 
                   <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-orange-500/20">
-                    <h3 className="text-2xl font-bold text-orange-300 mb-4">Phase 2: Content Bridge (Days 2-3)</h3>
+                    <h3 className="text-2xl font-bold text-orange-300 mb-4">Phase 2: Content Bridge (Days 3-5)</h3>
                     <ol className="list-decimal list-inside space-y-2 text-white/80">
                       <li>Research target customer search behavior</li>
                       <li>Create content targeting medium-tail keywords</li>
@@ -591,7 +597,7 @@ const RevenueBridgeMethod = () => {
                   </div>
 
                   <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-orange-500/20">
-                    <h3 className="text-2xl font-bold text-orange-300 mb-4">Phase 3: Authority Amplifier (Day 3)</h3>
+                    <h3 className="text-2xl font-bold text-orange-300 mb-4">Phase 3: Authority Amplifier (Days 6-7)</h3>
                     <ol className="list-decimal list-inside space-y-2 text-white/80">
                       <li>Document methodology and results</li>
                       <li>Create shareable case study content</li>
@@ -616,7 +622,7 @@ const RevenueBridgeMethod = () => {
 
                 {/* Complete Visual Timeline */}
                 <div className="mb-12">
-                  <h3 className="text-2xl font-bold text-white mb-6 text-center">Complete Visual Timeline: 3-Day Transformation</h3>
+                  <h3 className="text-2xl font-bold text-white mb-6 text-center">Complete Visual Timeline: 7-Day Transformation</h3>
                   <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -689,7 +695,7 @@ const RevenueBridgeMethod = () => {
                 </div>
 
                 <div className="bg-gradient-to-r from-green-900/20 to-blue-900/20 border border-green-500/30 rounded-2xl p-8 mb-8">
-                  <h3 className="text-2xl font-bold text-white mb-6">3-Day Performance Summary:</h3>
+                  <h3 className="text-2xl font-bold text-white mb-6">7-Day Performance Summary:</h3>
                   <ul className="space-y-2 text-white/80">
                     <li>• <strong>Traffic Growth:</strong> 4 to 10 daily active users (150% increase)</li>
                     <li>• <strong>Engagement Improvement:</strong> 300% increase in total events</li>
@@ -882,6 +888,31 @@ const RevenueBridgeMethod = () => {
                     >
                       Learn More About Our Process
                     </a>
+                  </div>
+                </div>
+              </section>
+
+              {/* Contact Section */}
+              <section id="contact" className="mt-16 pt-8 border-t border-white/20">
+                <div className="bg-gradient-to-r from-orange-500/20 to-orange-600/20 border border-orange-500/30 rounded-3xl p-8 text-center">
+                  <h3 className="text-3xl font-bold text-white mb-4">Get Your Free Foundation Audit</h3>
+                  <p className="text-white/80 mb-6 max-w-2xl mx-auto">
+                    Ready to implement the Revenue Bridge Method for your business? Schedule a free Foundation Audit and discover exactly what's preventing your website from generating customers.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button
+                      onClick={() => navigate('/intake')}
+                      className="btn-primary text-lg px-8 py-4 group"
+                    >
+                      Start Your Foundation Audit
+                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                    <button
+                      onClick={() => navigate('/#contact')}
+                      className="bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 px-8 py-4 rounded-lg transition-colors"
+                    >
+                      Contact Us Directly
+                    </button>
                   </div>
                 </div>
               </section>
