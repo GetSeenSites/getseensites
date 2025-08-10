@@ -1,22 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  
   const { trackGetStarted, trackNavigation } = useAnalytics();
 
   const handleGetStarted = () => {
     trackGetStarted('hero_cta');
-    if (user) {
-      navigate('/intake');
-    } else {
-      navigate('/auth');
-    }
+    navigate('/intake');
   };
 
   const handleSeeOurWork = () => {
@@ -81,8 +76,8 @@ const HeroSection = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
               >
-                You're Great at What You Do.
-                <span className="text-gradient block mt-2">But Can People Find You?</span>
+                Custom Websites + AI Chatbots
+                <span className="text-gradient block mt-2">That Convert</span>
               </motion.h1>
 
               <motion.p 
@@ -91,7 +86,8 @@ const HeroSection = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
               >
-                If your business isn't online—or worse, if it's online but invisible—you're leaving money on the table.
+                <strong>Tailored Websites + 24/7 AI Chatbots. Designed to Rank. Built to Convert.</strong><br/>
+                No cookie-cutter templates. We design for your business goals.
               </motion.p>
 
               <motion.div 
@@ -100,11 +96,10 @@ const HeroSection = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7, duration: 0.8 }}
               >
-                <p><strong className="text-white">🪪 You've built something real.</strong><br/>
-                A local shop. A loyal base. Word of mouth that keeps you busy. But here's the truth:</p>
+                <p><strong className="text-white">Every project includes on-page SEO practices for ranking in searches.</strong></p>
                 
-                <p className="font-semibold text-orange-300">Today's customer Googles before they visit.</p>
-                <p>If you're not showing up—or your site looks outdated—they choose someone else.</p>
+                <p className="font-semibold text-orange-300">Pricing is based on scope—book a free strategy call to get a tailored quote.</p>
+                <p>Industries served: luxury rentals, consultants, local businesses.</p>
               </motion.div>
 
               <motion.div
@@ -114,25 +109,18 @@ const HeroSection = () => {
                 className="space-y-6"
               >
                 <div>
-                  <h3 className="text-2xl font-bold text-white mb-4">We Don't Just Build Websites. We Build Growth Machines.</h3>
-                  <p className="text-white/80 mb-4">At GetSeenSites, we create{' '}
-                    <button 
-                      onClick={handleNavigateToServices}
-                      className="text-orange-300 hover:text-orange-200 underline transition-colors"
-                    >
-                      professional web development
-                    </button>{' '}
-                    solutions that convert strangers into customers. Not just "look pretty"—but perform. From design to launch to automation, it's all done for you.</p>
+                  <h3 className="text-2xl font-bold text-white mb-4">How It Works</h3>
+                  <p className="text-white/80 mb-4">Simple 4-step process: Intake form → Strategy call → Custom build → Launch. We handle everything while you focus on running your business.</p>
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="text-lg font-semibold text-orange-300">Here's how we help you win:</h4>
+                  <h4 className="text-lg font-semibold text-orange-300">What You Get:</h4>
                   {[
-                    'A site that works on every device (mobile-first, always)',
-                    'Fast loading + SEO baked in so customers actually find you',
-                    'Clear calls to action that drive bookings, purchases, and messages',
-                    'Follow-up tools to turn clicks into sales',
-                    'Delivered in under 5 days—fully handled, no tech skills needed'
+                    'Custom website designed for your industry and goals',
+                    '24/7 AI chatbot that captures leads while you sleep',
+                    'SEO optimization built-in for better Google rankings',
+                    'Mobile-responsive design that converts on all devices',
+                    'Strategy-first approach with free consultation call'
                   ].map((feature, index) => (
                     <motion.div
                       key={index}
@@ -158,7 +146,7 @@ const HeroSection = () => {
                   onClick={handleGetStarted}
                   className="btn-primary group text-lg px-8 py-4"
                 >
-                  Start Your Site Now
+                  Get a Custom Website Strategy
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
                 
@@ -167,6 +155,20 @@ const HeroSection = () => {
                   className="btn-secondary text-lg px-8 py-4"
                 >
                   See Our Work
+                </button>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.7, duration: 0.6 }}
+              >
+                <button
+                  onClick={() => navigate('/traffic-acceleration-framework')}
+                  aria-label="See our 875% traffic case study"
+                  className="mt-2 underline text-white/80 hover:text-white"
+                >
+                  See our 875% traffic case study
                 </button>
               </motion.div>
             </motion.div>
@@ -180,41 +182,48 @@ const HeroSection = () => {
             >
               {/* Main showcase card */}
               <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-orange-500/20 shadow-2xl">
-                <h3 className="text-2xl font-bold text-white mb-6">💬 Real Results from Real Owners:</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">🚀 Case Study: 875% Traffic Growth</h3>
                 
-                {/* Testimonials */}
+                {/* Case Study Preview */}
                 <div className="space-y-6">
                   <div className="flex items-center space-x-4">
                     <img 
-                      src="Logo_barber.png" 
-                      alt="RudeBoyBlendz Business" 
-                      className="w-16 h-16 rounded-xl object-cover"
+                      src="/Logo.png" 
+                      alt="GetSeenSites Case Study" 
+                      className="w-16 h-16 rounded-xl object-cover bg-white/10 p-2"
                     />
                     <div>
-                      <div className="text-white font-semibold">Rudy</div>
-                      <div className="text-orange-300 text-sm">RudeBoyBlendz Barbershop</div>
+                      <div className="text-white font-semibold">GetSeenSites</div>
+                      <div className="text-orange-300 text-sm">Case Study</div>
                     </div>
                   </div>
                   
                   <blockquote className="text-white/90 italic text-lg leading-relaxed">
-                    "Now people are booking me online without a single phone call."
+                    "Traffic increased by 875% in just 7 days using our proven framework."
                   </blockquote>
 
                   <div className="mt-4 space-y-2 text-sm text-white/70">
-                    <p>"The site looks clean, works great, and clients started showing up from Google within a week." — Connor, COFooty Soccer Training</p>
-                    <p>"I didn't have to worry about a thing. They got it right the first time." — David, Photographer</p>
+                    <p>"We love the responsiveness of the site, it's really solid" — Executive Exotics</p>
+                    <p>"The website is so good, thanks a million." — CoFooty</p>
                   </div>
+                  
+                  <button 
+                    onClick={() => navigate('/traffic-acceleration-framework')}
+                    className="text-orange-300 hover:text-orange-200 underline transition-colors text-sm font-medium"
+                  >
+                    → Read the full case study
+                  </button>
                 </div>
 
                 {/* Feature highlights */}
                 <div className="mt-8 space-y-3">
-                  <h4 className="text-lg font-semibold text-orange-300">💡 You Don't Need to Be a Tech Wizard.</h4>
-                  <p className="text-white/80 text-sm mb-4">Just bring your vision—we'll do the rest.</p>
+                  <h4 className="text-lg font-semibold text-orange-300">💡 Simple Process, Powerful Results</h4>
+                  <p className="text-white/80 text-sm mb-4">Strategy-first approach with transparent pricing.</p>
                   
                   {[
-                    '🎯 Step 1: Tell us about your business',
-                    '⚙️ Step 2: We build your high-converting site',
-                    '🚀 Step 3: You go live in 5 days or less'
+                    '🎯 Step 1: Complete intake form about your business',
+                    '⚙️ Step 2: Free strategy call to plan your custom solution',
+                    '🚀 Step 3: We build and launch your high-impact website'
                   ].map((step, index) => (
                     <motion.div
                       key={index}
@@ -236,8 +245,8 @@ const HeroSection = () => {
                 transition={{ delay: 1.8, duration: 0.6 }}
                 className="absolute -top-4 -right-4 bg-orange-gradient rounded-2xl p-4 text-center shadow-xl"
               >
-                <div className="text-2xl font-bold text-white">5 Days</div>
-                <div className="text-white/90 text-xs font-medium">Or Less</div>
+                <div className="text-2xl font-bold text-white">875%</div>
+                <div className="text-white/90 text-xs font-medium">Growth</div>
               </motion.div>
             </motion.div>
           </div>
