@@ -14,6 +14,7 @@ import QuestionCheckboxGrid from '../components/forms/QuestionCheckboxGrid';
 import ImageUpload from '../components/forms/ImageUpload';
 import { toast } from "sonner";
 import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   step: number;
@@ -127,6 +128,8 @@ const IntakePage = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const validatePageCount = (pageCount: number, selectedPlan: string) => {
     const plan = plans[selectedPlan as keyof typeof plans];
@@ -150,11 +153,8 @@ const IntakePage = () => {
         if (!formData.businessDescription.trim()) newErrors.businessDescription = 'Business description is required';
         if (!formData.targetAudience.trim()) newErrors.targetAudience = 'Target audience is required';
         break;
-      case 5:
-        // Validate page count for step 5 (plan selection)
-        const pageCountError = validatePageCount(formData.pageCount, formData.selectedPlan);
-        if (pageCountError) newErrors.pageCount = pageCountError;
-        break;
+      // Step 5 is review; no validation needed
+      break;
     }
     
     setErrors(newErrors);
@@ -377,46 +377,10 @@ const IntakePage = () => {
         // Continue with checkout even if email fails
       }
 
-      // Create Stripe checkout session
-      console.log("Creating Stripe checkout session...");
-      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
-        body: {
-          formData: {
-            ...formData,
-            submissionId: submission.id
-          }
-        }
-      });
-
-      if (checkoutError) {
-        console.error('Error creating checkout:', checkoutError);
-        toast.error(`Payment setup failed: ${checkoutError.message || 'Unknown error'}`);
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (!checkoutData?.url) {
-        console.error('No checkout URL received:', checkoutData);
-        toast.error('Payment setup failed: No checkout URL received');
-        setIsSubmitting(false);
-        return;
-      }
-
-      console.log("Checkout session created successfully:", checkoutData.sessionId);
-
-      // Update submission with Stripe session ID
-      if (checkoutData.sessionId) {
-        await supabase
-          .from('intake_submissions')
-          .update({ stripe_session_id: checkoutData.sessionId })
-          .eq('id', submission.id);
-      }
-
-      toast.success("Form submitted successfully! Redirecting to payment...");
-      
-      // Redirect to Stripe checkout
-      console.log("Redirecting to Stripe checkout:", checkoutData.url);
-      window.location.href = checkoutData.url;
+      // Finalize: Email already attempted above. No payment step in consulting model.
+      toast.success("Thanks! Your intake was submitted. We'll email you shortly.");
+      setIsSubmitting(false);
+      setShowConfirmation(true);
 
     } catch (error) {
       console.error("Submission error:", error);
@@ -425,8 +389,8 @@ const IntakePage = () => {
     }
   };
 
-  const stepIcons = [Building2, Target, Palette, Camera, CreditCard, FileText];
-  const stepTitles = ['Company Info', 'Business Details', 'Design Preferences', 'Photo Upload', 'Plan Selection', 'Order Summary'];
+  const stepIcons = [Building2, Target, Palette, Camera, FileText];
+  const stepTitles = ['Company Info', 'Business Details', 'Design Preferences', 'Photo Upload', 'Review & Submit'];
 
   const renderStep = () => {
     const StepIcon = stepIcons[formData.step - 1];
@@ -702,165 +666,30 @@ const IntakePage = () => {
             </div>
           </div>
         );
-        
+      
       case 5:
-        return (
-          <div className="max-w-6xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center mb-12"
-            >
-              <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <CreditCard className="w-10 h-10 text-white" />
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Choose Your Plan</h2>
-              <p className="text-xl text-orange-200">Select the perfect plan for your business</p>
-            </motion.div>
-            
-            {/* Plan Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {Object.entries(plans).map(([key, plan]) => (
-                <motion.div
-                  key={key}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * Object.keys(plans).indexOf(key) }}
-                >
-                  <Card 
-                    className={`cursor-pointer transition-all duration-300 hover:scale-105 h-full ${
-                      formData.selectedPlan === key 
-                        ? 'ring-2 ring-orange-500 shadow-2xl shadow-orange-500/25 bg-white/10 border-orange-500' 
-                        : 'bg-white/5 hover:bg-white/10 border-white/20'
-                    } backdrop-blur-sm`}
-                    onClick={() => handleRadioChange('selectedPlan', key)}
-                  >
-                    <CardHeader className="text-center pb-4">
-                      <CardTitle className={`text-2xl font-bold mb-2 ${
-                        formData.selectedPlan === key ? 'text-orange-300' : 'text-white'
-                      }`}>{plan.name}</CardTitle>
-                      <div className="space-y-2">
-                        <div className={`text-3xl font-bold ${
-                          formData.selectedPlan === key ? 'text-orange-300' : 'text-orange-400'
-                        }`}>
-                          ${plan.monthlyFee}/mo
-                        </div>
-                        <div className={`text-lg font-medium ${
-                          formData.selectedPlan === key ? 'text-orange-200' : 'text-orange-200'
-                        }`}>
-                          + ${plan.setupFee} setup fee
-                        </div>
-                        <div className={`text-sm ${
-                          formData.selectedPlan === key ? 'text-orange-200' : 'text-orange-300'
-                        }`}>
-                          {plan.maxPages === Infinity ? 'Unlimited pages' : `Up to ${plan.maxPages} pages`}
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <ul className="space-y-3">
-                        {plan.features.map((feature, index) => (
-                          <li key={index} className={`flex items-center space-x-3 ${
-                            formData.selectedPlan === key ? 'text-white' : 'text-white/90'
-                          }`}>
-                            <Check className={`h-4 w-4 flex-shrink-0 ${
-                              formData.selectedPlan === key ? 'text-orange-300' : 'text-orange-400'
-                            }`} />
-                            <span className="text-sm">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      {formData.selectedPlan === key && (
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          className="flex items-center justify-center space-x-2 text-orange-300 bg-orange-500/20 rounded-lg py-2"
-                        >
-                          <Check className="h-5 w-5" />
-                          <span className="font-semibold">Selected</span>
-                        </motion.div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+        if (showConfirmation) {
+          return (
+            <div className="max-w-2xl mx-auto">
+              <Card className="bg-white/5 backdrop-blur-sm border-white/10" data-testid="intake-review">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold text-white flex items-center">
+                    <Check className="h-6 w-6 mr-2 text-green-400" /> Submission received
+                  </CardTitle>
+                  <CardDescription className="text-white/70">Thanks! We’ll review your details and reach out shortly.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button onClick={() => window.location.href = '/'} className="mt-2">
+                    Return to Home
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
-            
-            {/* Page Count */}
-            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl mb-8 border border-white/10">
-              <Label htmlFor="pageCount" className="text-white text-lg font-medium block mb-3">
-                Number of Pages
-              </Label>
-              <Input
-                type="number"
-                id="pageCount"
-                name="pageCount"
-                value={formData.pageCount}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value);
-                  handlePageCountChange(value);
-                }}
-                className={`bg-white/10 backdrop-blur-sm border-white/20 text-white placeholder:text-white/60 text-lg py-4 focus:border-orange-400 focus:ring-orange-400/20 ${
-                  errors.pageCount ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
-                }`}
-                min="1"
-                max={plans[formData.selectedPlan].maxPages === Infinity ? "999" : plans[formData.selectedPlan].maxPages.toString()}
-              />
-              {errors.pageCount && (
-                <motion.p 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-red-400 text-sm font-medium mt-2"
-                >
-                  {errors.pageCount}
-                </motion.p>
-              )}
-              <div className="text-sm text-orange-200 mt-2">
-                {plans[formData.selectedPlan].maxPages === Infinity 
-                  ? 'No page limit on Premium plan' 
-                  : `Maximum ${plans[formData.selectedPlan].maxPages} pages allowed for ${plans[formData.selectedPlan].name} plan`
-                }
-              </div>
-            </div>
+          );
+        }
 
-            {/* Add-ons */}
-            <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
-              <h3 className="text-2xl font-bold text-white mb-6">Add-ons</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { key: 'logo', label: 'Logo Design', price: addOnPrices.logo, type: 'one-time' },
-                  { key: 'content', label: 'Content Writing', price: addOnPrices.content, type: 'per-page' },
-                  { key: 'chatbot', label: 'AI Chatbot', price: addOnPrices.chatbot, type: 'one-time' }
-                ].map((addon) => (
-                  <motion.label 
-                    key={addon.key} 
-                    className="flex items-center justify-between p-4 border border-orange-500/30 rounded-xl cursor-pointer hover:bg-orange-500/10 transition-all duration-300 group"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={formData.addOns[addon.key as keyof typeof formData.addOns]}
-                        onChange={(e) => handleCheckboxChange(addon.key, e.target.checked)}
-                        className="w-5 h-5 text-orange-500 bg-white/10 border-white/30 rounded focus:ring-orange-500 focus:ring-2"
-                      />
-                      <span className="text-white font-medium group-hover:text-orange-200 transition-colors">{addon.label}</span>
-                    </div>
-                    <span className="text-orange-400 font-bold">
-                      ${addon.price}{addon.type === 'per-page' ? '/page' : ''}
-                    </span>
-                  </motion.label>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-        
-      case 6:
-        const pricing = calculatePricing();
         return (
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-3xl mx-auto" data-testid="intake-review">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -869,71 +698,159 @@ const IntakePage = () => {
               <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                 <FileText className="w-10 h-10 text-white" />
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Order Summary</h2>
-              <p className="text-xl text-orange-200">Review your order details</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Review & Submit</h2>
+              <p className="text-xl text-orange-200">Review your details before submitting</p>
             </motion.div>
-            
-            <Card className="bg-white/5 backdrop-blur-sm border-white/10">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-white">Your Order</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center py-3 border-b border-white/20">
-                    <span className="text-white/80 font-medium">Plan</span>
-                    <span className="text-white font-semibold capitalize">{formData.selectedPlan}</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center py-3 border-b border-white/20">
-                    <span className="text-white/80 font-medium">Pages</span>
-                    <span className="text-white font-semibold">{formData.pageCount}</span>
-                  </div>
-                  
-                  {pricing.oneTimeAddOns > 0 && (
-                    <div className="flex justify-between items-center py-3 border-b border-white/20">
-                      <span className="text-white/80 font-medium">One-time Add-ons</span>
-                      <span className="text-white font-semibold">${pricing.oneTimeAddOns}</span>
-                    </div>
-                  )}
-                  
-                  <div className="flex justify-between items-center py-3 border-b border-white/20">
-                    <span className="text-white/80 font-medium">Monthly Fee</span>
-                    <span className="text-white font-semibold">${pricing.monthlyRecurring}</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center py-3 border-b border-white/20">
-                    <span className="text-white/80 font-medium">Setup Fee</span>
-                    <span className="text-white font-semibold">${pricing.setupFee}</span>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between items-center py-6 bg-gradient-to-r from-orange-500/20 to-orange-600/20 rounded-xl px-6 border border-orange-500/30">
-                  <span className="text-xl font-bold text-white">Total Today</span>
-                  <span className="text-3xl font-bold text-orange-400">${pricing.today}</span>
-                </div>
 
-                <Button 
-                  onClick={handleSubmit} 
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      Confirm and Submit
-                      <Sparkles className="ml-2 h-5 w-5" />
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              {/* Contact & Company */}
+              <Card className="bg-black/50 backdrop-blur-sm border-white/20">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-white">Contact & Company</CardTitle>
+                    <CardDescription className="text-orange-200">Basic information</CardDescription>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setFormData(prev => ({ ...prev, step: 1 }))}
+                    className="border-orange-500/50 text-orange-400 hover:bg-orange-500 hover:text-white"
+                  >
+                    Edit
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <dt className="text-orange-200 text-sm">Email</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words">{formData.email || '—'}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-orange-200 text-sm">Company</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words">{formData.companyName || '—'}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-orange-200 text-sm">Website URL</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words">{formData.websiteUrl || '—'}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-orange-200 text-sm">Industry</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words">{formData.industry || '—'}</dd>
+                    </div>
+                  </dl>
+                </CardContent>
+              </Card>
+
+              {/* Business Details */}
+              <Card className="bg-black/50 backdrop-blur-sm border-white/20">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-white">Business Details</CardTitle>
+                    <CardDescription className="text-orange-200">Context & goals</CardDescription>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setFormData(prev => ({ ...prev, step: 2 }))}
+                    className="border-orange-500/50 text-orange-400 hover:bg-orange-500 hover:text-white"
+                  >
+                    Edit
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <dl className="grid grid-cols-1 gap-4">
+                    <div>
+                      <dt className="text-orange-200 text-sm">Business Description</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words whitespace-pre-wrap">{formData.businessDescription || '—'}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-orange-200 text-sm">Target Audience</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words whitespace-pre-wrap">{formData.targetAudience || '—'}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-orange-200 text-sm">Goals</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words whitespace-pre-wrap">{formData.goals || '—'}</dd>
+                    </div>
+                  </dl>
+                </CardContent>
+              </Card>
+
+              {/* Design Preferences */}
+              <Card className="bg-black/50 backdrop-blur-sm border-white/20">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-white">Design Preferences</CardTitle>
+                    <CardDescription className="text-orange-200">Style, color, inspiration</CardDescription>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setFormData(prev => ({ ...prev, step: 3 }))}
+                    className="border-orange-500/50 text-orange-400 hover:bg-orange-500 hover:text-white"
+                  >
+                    Edit
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <dt className="text-orange-200 text-sm">Style Preferences</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words whitespace-pre-wrap">{formData.stylePreferences || '—'}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-orange-200 text-sm">Color Preferences</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words whitespace-pre-wrap">{formData.colorPreferences || '—'}</dd>
+                    </div>
+                    <div className="md:col-span-2">
+                      <dt className="text-orange-200 text-sm">Inspiration Websites</dt>
+                      <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white break-words">{formData.exampleWebsites || '—'}</dd>
+                    </div>
+                  </dl>
+                </CardContent>
+              </Card>
+
+              {/* Uploads */}
+              <Card className="bg-black/50 backdrop-blur-sm border-white/20">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle className="text-white">Uploads</CardTitle>
+                    <CardDescription className="text-orange-200">Files provided</CardDescription>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setFormData(prev => ({ ...prev, step: 4 }))}
+                    className="border-orange-500/50 text-orange-400 hover:bg-orange-500 hover:text-white"
+                  >
+                    Edit
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <div>
+                    <dt className="text-orange-200 text-sm">Logo Files</dt>
+                    <dd className="bg-black/70 border border-white/20 p-3 rounded-lg text-white">{formData.logoFiles.length ? `${formData.logoFiles.length} file(s)` : 'None'}</dd>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Button 
+                onClick={handleSubmit}
+                data-testid="intake-submit"
+                disabled={isSubmitting}
+                className="w-full mt-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    Confirm and Submit
+                    <Sparkles className="ml-2 h-5 w-5" />
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         );
-        
+      
       default:
         return <div>Unknown step</div>;
     }
@@ -993,17 +910,17 @@ const IntakePage = () => {
           <div className="w-full bg-black/50 rounded-full h-4 backdrop-blur-sm border border-white/10">
             <motion.div
               className="bg-gradient-to-r from-orange-500 to-orange-600 h-4 rounded-full flex items-center justify-end pr-2"
-              style={{ width: `${(formData.step / 6) * 100}%` }}
+              style={{ width: `${(formData.step / 5) * 100}%` }}
               initial={{ width: 0 }}
-              animate={{ width: `${(formData.step / 6) * 100}%` }}
+              animate={{ width: `${(formData.step / 5) * 100}%` }}
               transition={{ duration: 0.5 }}
             >
               <div className="w-2 h-2 bg-white rounded-full shadow-lg"></div>
             </motion.div>
           </div>
           <div className="flex justify-between mt-3 text-sm">
-            <span className="text-orange-200 font-medium">Step {formData.step} of 6</span>
-            <span className="text-orange-200 font-medium">{Math.round((formData.step / 6) * 100)}% Complete</span>
+            <span className="text-orange-200 font-medium">Step {formData.step} of 5</span>
+            <span className="text-orange-200 font-medium">{Math.round((formData.step / 5) * 100)}% Complete</span>
           </div>
         </div>
 
@@ -1068,7 +985,7 @@ const IntakePage = () => {
           </Button>
           
           <div className="flex space-x-2">
-            {[1, 2, 3, 4, 5, 6].map((step) => (
+            {[1, 2, 3, 4, 5].map((step) => (
               <div
                 key={step}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
@@ -1084,7 +1001,7 @@ const IntakePage = () => {
           
           <Button 
             onClick={nextStep} 
-            disabled={formData.step === 6}
+            disabled={formData.step === 5}
             className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25"
           >
             Next
