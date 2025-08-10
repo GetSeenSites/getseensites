@@ -108,7 +108,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <button 
-                  onClick={() => handleNavigation('#services')}
+                  onClick={() => handleNavigation('/services')}
                   className="text-white/80 hover:text-orange-400 transition-colors text-left"
                 >
                   Website Design
@@ -116,7 +116,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  onClick={() => handleNavigation('#services')}
+                  onClick={() => handleNavigation('/services')}
                   className="text-white/80 hover:text-orange-400 transition-colors text-left"
                 >
                   E-commerce Development
@@ -124,7 +124,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  onClick={() => handleNavigation('#services')}
+                  onClick={() => handleNavigation('/services')}
                   className="text-white/80 hover:text-orange-400 transition-colors text-left"
                 >
                   SEO Services
@@ -132,7 +132,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  onClick={() => handleNavigation('#services')}
+                  onClick={() => handleNavigation('/services')}
                   className="text-white/80 hover:text-orange-400 transition-colors text-left"
                 >
                   Website Maintenance
@@ -155,7 +155,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  onClick={() => handleNavigation('#work')}
+                  onClick={() => handleNavigation('/websites')}
                   className="text-white/80 hover:text-orange-400 transition-colors text-left"
                 >
                   Portfolio
@@ -186,7 +186,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <button 
-                  onClick={() => handleNavigation('#services')}
+                  onClick={() => handleNavigation('/services')}
                   className="text-white/80 hover:text-orange-400 transition-colors text-left"
                 >
                   Delaware Web Design
@@ -194,7 +194,7 @@ const Footer = () => {
               </li>
               <li>
                 <button 
-                  onClick={() => handleNavigation('#services')}
+                  onClick={() => handleNavigation('/services')}
                   className="text-white/80 hover:text-orange-400 transition-colors text-left"
                 >
                   Bear Area Services
@@ -212,36 +212,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Newsletter Section */}
-        <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-orange-500/20 mb-12">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h4 className="text-2xl font-bold text-white mb-4">Stay Updated</h4>
-              <p className="text-white/80 mb-4">
-                Get the latest tips on website optimization, small business growth, and our{' '}
-                <button 
-                  onClick={() => handleNavigation('/revenue-bridge-method')}
-                  className="text-orange-300 hover:text-orange-200 underline transition-colors"
-                >
-                  Revenue Bridge Method
-                </button>{' '}
-                insights delivered to your inbox.
-              </p>
-            </div>
-            <div>
-              <div className="flex">
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  className="bg-white/10 border border-white/20 rounded-l-md py-3 px-4 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent backdrop-blur-sm flex-1"
-                />
-                <button className="bg-orange-500 hover:bg-orange-600 text-white rounded-r-md px-6 py-3 transition-colors font-semibold">
-                  Subscribe
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
