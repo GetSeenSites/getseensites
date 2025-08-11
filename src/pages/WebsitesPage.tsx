@@ -33,48 +33,6 @@ const WebsitesPage = () => {
       tags: ["Train", "Booking", "Sports"],
       url: "https://www.cofooty.com/",
       image: "Web_train.png"
-    },
-    {
-      title: "SkylineBuild ",
-      description: "Clean, corporate website showcasing construction services.",
-      tags: ["Construction", "Roofing", "Business"],
-      url: "https://techflow-solutions.com",
-      image: "Web_construction.png"
-    },
-    {
-      title: "Ramen Numerals",
-      description: "Small Japanese ramen shop.",
-      tags: ["Food", "Japan", "Restaurant"],
-      url: "https://artisan-jewelry.com",
-      image: "Web_rest.png"
-    },
-    {
-      title: "On The Edge Photography",
-      description: "Professional portfolio showcasing creative photography work.",
-      tags: ["Portfolio", "Photography", "Creative"],
-      url: "https://davidpark-photo.com",
-      image: "Web_photo.png"
-    },
-    {
-      title: "GREEN VALLEY LANDSCAPING",
-      description: "Service-based website with project galleries and quote calculator.",
-      tags: ["Services", "Landscaping", "Calculator"],
-      url: "https://greenvalley-landscape.com",
-      image: "Web_land.png"
-    },
-    {
-      title: "URBAN FITNESS STUDIO",
-      description: "Modern fitness studio with class scheduling and membership management.",
-      tags: ["Fitness", "Booking", "Membership"],
-      url: "https://urban-fitness.com",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&h=600"
-    },
-    {
-      title: "COASTAL REAL ESTATE",
-      description: "Premium real estate platform with property listings and virtual tours.",
-      tags: ["Real Estate", "Listings", "Virtual Tours"],
-      url: "https://coastal-realestate.com",
-      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&h=600"
     }
   ];
 
