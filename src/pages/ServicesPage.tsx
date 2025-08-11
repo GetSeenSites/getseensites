@@ -2,7 +2,7 @@ import React from 'react';
 import ConsultingServicesSection from '../components/ConsultingServicesSection';
 import ContactSection from '../components/ContactSection';
 import FAQ from '../components/FAQ';
-// import Footer from '../components/Footer';
+//import Footer from '../components/Footer';
 
 const ServicesPage = () => {
   return (
@@ -12,7 +12,7 @@ const ServicesPage = () => {
         <ContactSection />
       </div>
       <FAQ />
-      <Footer />
+      
     </div>
   );
 };
