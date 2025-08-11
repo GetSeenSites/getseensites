@@ -20,11 +20,11 @@ const TestimonialsSection = () => {
       image: "/Screenshot (191).png"
     },
     {
-      name: "David Park",
+      name: "Leonard Ail-Permel",
       business: "Photography Studio",
-      text: "My portfolio has never looked better. The cosmic design perfectly captures the essence of my creative work.",
+      text: "We are very pleased with the site, It looks great!. The responsiveness on both PC and mobile is really good. ",
       rating: 5,
-      image: "/placeholder.svg"
+      image: "Ex_Logo.PNG"
     }
   ];
 
