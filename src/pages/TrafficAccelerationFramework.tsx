@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle, TrendingUp, Users, Zap, BarChart3, Target, Rocket } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import Footer from '../components/Footer';
 
 const TrafficAccelerationFramework = () => {
   const navigate = useNavigate();
@@ -512,9 +511,6 @@ const TrafficAccelerationFramework = () => {
 
       </article>
 
-      <div className="text-white">
-        <Footer />
-      </div>
     </div>
   );
 };
