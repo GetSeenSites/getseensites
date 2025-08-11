@@ -244,3 +244,8 @@ html {
 .sidebar-expanded .sidebar-label:nth-child(4) { transition-delay: 0.2s; }
 .sidebar-expanded .sidebar-label:nth-child(5) { transition-delay: 0.25s; }
 .sidebar-expanded .sidebar-label:nth-child(6) { transition-delay: 0.3s; }
+
+/* Traffic Acceleration page text override */
+.taf-page * {
+  color: hsl(var(--foreground)) !important;
+}
