@@ -20,9 +20,9 @@ const WhyUsSection = () => {
   const features = [
     "A modern, mobile-optimized site that looks amazing on every device",
     "Built-in SEO so people actually find you",
-    "Fast turnaround—live in days, not weeks",
+    "Fast turnaround—live weeks",
     "Clear pricing, no surprises",
-    "Real human support (not AI-generated templates that make no sense)"
+    "Real human support"
   ];
 
   return (
