@@ -7,9 +7,7 @@ import Footer from '../components/Footer';
 const ServicesPage = () => {
   return (
     <div className="min-h-screen">
-      <div className="pt-20">
-        <ConsultingServicesSection />
-      </div>
+      <ConsultingServicesSection />
       <div id="contact">
         <ContactSection />
       </div>
