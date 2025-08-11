@@ -109,7 +109,7 @@ const ContactSection = () => {
           </h2>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
             Ready to transform your business? Let's discuss your project and bring your vision to life. 
-            Our proven process delivers results in just 5 days.
+            Our proven process delivers results.
           </p>
         </motion.div>
 
