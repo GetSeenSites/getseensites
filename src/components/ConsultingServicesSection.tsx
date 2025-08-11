@@ -24,7 +24,7 @@ const ConsultingServicesSection = () => {
     {
       icon: <Zap className="w-8 h-8" />,
       title: "24/7 AI Chatbot",
-      description: "Capture leads while you sleep with intelligent conversations that qualify prospects automatically."
+      description: "Capture leads while you sleep with intelligent conversations that qualify prospects automatically and guides users."
     },
     {
       icon: <Target className="w-8 h-8" />,
@@ -93,7 +93,7 @@ const ConsultingServicesSection = () => {
           
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto mb-8">
             <div className="space-y-2 text-white/90">
-              <p>✅ Every project includes on-page SEO best practices</p>
+              <p>✅ On-page SEO best practices</p>
               <p>✅ AI chatbot for capturing leads 24/7</p>
               <p>✅ Pricing based on scope—get tailored quote</p>
               <p>✅ <span className="text-orange-300">Strategy call included</span> to plan your success</p>
